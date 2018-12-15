@@ -1,8 +1,13 @@
 FROM node:latest
-WORKDIR /usr/src/app
-COPY package*.json ./
+RUN mkdir app && cd app
+COPY backend/package.json .
 RUN npm install
-COPY . .
+COPY backend .
 
-EXPOSE 8080
+ENV AUTH=false
+ENV URL=localhost:27017
+ENV DB=admin
+ENV SEED="huge pool glance daring own category scout dignity impulse field furnace pencil mistake spawn trac"
+
+EXPOSE 3000
 CMD [ "npm", "start" ]
