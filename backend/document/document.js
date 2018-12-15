@@ -1,5 +1,6 @@
 const {Tree, Document} = require("./../db/db");
 const MerkleTree = require("./../merkletree/merkletree");
+const dataTx = require("../waves/dataTx");
 
 async function addDocument(name, nickname, encryptedData, hash, requiredCountOfSignatures, digest) {
     await Document.create(name, nickname, encryptedData, hash, requiredCountOfSignatures, [digest]);
@@ -32,8 +33,14 @@ async function pushTreeToDB(signedDocument) {
     await Tree.createOrUpdate(tree.tree, tree.root);
 }
 
-async function pushRootHashToBlockchain(rootHash) {
+async function pushRootHashToBlockchain(rootHash, seed) {
 
+    let signedData = dataTx.SignDataTx([{
+        key:"rootHash", value:rootHash
+    }],seed);
+
+    await dataTx.SendSignTX(signedData)
+    
 }
 
 async function getDocumentByName(id) {
