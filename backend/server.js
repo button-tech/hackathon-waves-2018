@@ -36,7 +36,7 @@ app.get('/download/:id', async (req, res) => await handlers.getDocument(req,res)
 
 /*
     {
-        signature,
+        signaturePartner,
         timestampPartner
 
         return {

@@ -11,7 +11,7 @@ function getTree() {
     return Tree.get();
 }
 
-async function addDocument(
+function addDocument(
     name,
     nicknameOwner,
     nicknamePartner,
@@ -22,7 +22,7 @@ async function addDocument(
     digest,
     timestampOwner
 ) {
-    await Document.create(
+    return Document.create(
         name,
         nicknameOwner,
         nicknamePartner,
@@ -37,7 +37,8 @@ async function addDocument(
 
 async function updateDocumentSignatureAndTimestamp(id, signature, timestamp) {
     const doc = await Document.get.byID(id);
-    const signatures = doc.signatures.push(signature);
+    doc.signatures.push(signature);
+    const signatures = doc.signatures;
     await Document.update.signature.byID(id, signatures, timestamp);
 }
 
@@ -52,9 +53,9 @@ async function pushTreeToDB(id, document) {
     } else {
         tree = MerkleTree.rebuildMerkleTree(old.tree, [newLeave], MerkleTree.SHA256);
     }
-    const lastIndex = getLeaves(tree.tree).length;
+    const lastIndex = MerkleTree.getLeaves(tree.tree).length;
     await updateDocumentIndex(id, lastIndex);
-    await pushRootHashToBlockchain(tree.root);
+    await pushRootHashToBlockchain(tree.root, process.env.SEED);
     await Tree.createOrUpdate(tree.tree, tree.root);
 }
 
@@ -68,7 +69,8 @@ async function pushRootHashToBlockchain(rootHash, seed) {
         key:"rootHash", value:rootHash
     }],seed);
 
-    await dataTx.SendSignTX(signedData)
+    const response = await dataTx.SendSignTX(signedData);
+    console.log(response)
     
 }
 

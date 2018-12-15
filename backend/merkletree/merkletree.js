@@ -20,7 +20,9 @@ function rebuildMerkleTree(tree, newLeaves, hashFunc) {
 }
 
 function getProof(tree, leaf) {
-    return tree.getProof(leaf)
+    const leaves = tree.leaves.map(l => l.toString('hex'));
+    const t = buildMerkleTree(leaves, SHA256);
+    return t.tree.getProof(leaf);
 }
 
 module.exports = {
