@@ -12,15 +12,25 @@ const Tree = {
 };
 
 const Document = {
-    create: (index, name, nickname, data, hash, requiredCountOfSignatures, signatures) => {
-        return document.create({name: name, nickname: nickname, data: data, hash: hash, requiredCountOfSignatures: requiredCountOfSignatures, signatures: signatures});
+    create: (name, nicknameOwner, nicknamePartner, dataOwner ,dataPartner, hash, requiredCountOfSignatures, signatures, timestampOwner) => {
+        return document.create({
+            name: name,
+            nicknameOwner: nicknameOwner,
+            nicknamePartner: nicknamePartner,
+            dataOwner: dataOwner,
+            dataPartner: dataPartner,
+            hash: hash,
+            requiredCountOfSignatures: requiredCountOfSignatures,
+            signatures: signatures,
+            timestampOwner: timestampOwner
+        });
     },
     update: {
       signature: {
-          byIndex: (index, signatures) => {
+          byIndex: (index, signatures, timestampPartner) => {
               return document.updateOne({
                   index: index
-              }, { signatures: signatures } );
+              }, { signatures: signatures, timestampPartner: timestampPartner } );
           },
           byName: (name, signatures) => {
               return document.updateOne({
@@ -31,17 +41,25 @@ const Document = {
               return document.updateOne({
                   hash: hash
               }, { signatures: signatures } );
+          },
+          byID: (id, signatures, timestampPartner) => {
+              return document.updateOne({
+                  _id: id
+              }, { signatures: signatures, timestampPartner: timestampPartner } );
           }
       },
-      index: (hash, index) => {
+      index: (id, index) => {
           return document.updateOne({
-              hash: hash
+              _id: id
           }, { index: index } );
       }
     },
     get: {
-        byNickname: (nickname) => {
-            return document.find({nickname: nickname}).exec();
+        byNicknameOwner: (nickname) => {
+            return document.find({nicknameOwner: nickname}).exec();
+        },
+        byNicknamePartner: (nickname) => {
+            return document.find({nicknamePartner: nickname}).exec();
         },
         byIndex: (index) => {
             return document.findOne({index: index}).exec();
@@ -51,6 +69,9 @@ const Document = {
         },
         byFileHash: (hash) => {
             return document.findOne({hash: hash}).exec();
+        },
+        byID: (id) => {
+            return document.findOne({_id: id}).exec();
         },
         all: () => {
             return document.find({}).exec();

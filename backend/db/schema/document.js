@@ -7,8 +7,11 @@ const Document = new Schema({
     name: {
       type: String
     },
-    data: {
-        type: Object
+    dataOwner: {
+        type: String
+    },
+    dataPartner: {
+        String
     },
     hash: {
       type: String
@@ -19,12 +22,18 @@ const Document = new Schema({
     signatures: {
       type: Object
     },
-    nickname: {
+    nicknameOwner: {
       type: String
     },
-    timestamp: {
+    nicknamePartner: {
+      type: String
+    },
+    timestampOwner: {
         type: Date,
         default: Date.now()
+    },
+    timestampPartner: {
+        type: Date
     }
 }, {
     versionKey: false
