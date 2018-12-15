@@ -21,10 +21,10 @@
         </div>
         <div class="col-md-6 offset-md-3">
             <ul class="timeline" id="data">
-                <li id="show"style="display: none">
+                <li id="show" style="display: none">
                     <h2 class="Asker">Upload your file</h2>
                     <div class="col-md-12 text-center">
-                        <form method="post" >
+                        <form method="post">
                             <div class="form-group files">
                                 <input type="file" class="form-control" multiple="">
                             </div>
@@ -34,15 +34,50 @@
                         <a class="btn btn-lg btn-info cont_button" id="click1">Done</a>
                     </div>
                 </li>
-                <li id="show1"style="display: none">
+                <li id="show1" style="display: none">
                     <h2>Please sign it</h2>
                     <form method="post">
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Private key" aria-label="Private key">
+                            <input type="password" class="form-control" placeholder="Private key"
+                                   aria-label="Private key">
                         </div>
                     </form>
                     <div class="text-center col-12">
                         <a class="btn btn-lg btn-info cont_button" id="click2">Done</a>
+                    </div>
+                </li>
+
+                <li id="show2" style="display: none">
+                    <h2>This is information that allow you to verify it</h2>
+                    <h3>Please, save it</h3>
+                    <div class="container">
+                        <div class="row">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td class="er" data-clipboard-text="0x${serverData.hash}"><strong>Hash:</strong>
+                                        0x${serverData.hash === undefined ? p.getHash(file.data).substring(2) :
+                                        serverData.hash}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.timstamp}"><strong>
+                                        Timestamp:</strong> ${serverData.timstamp === undefined ? serverData.timestamp :
+                                        serverData.timstamp}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.txNumber}"><strong> Tx
+                                        Number:</strong> ${serverData.txNumber}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.assetId}"><strong> Document
+                                        Id:</strong> ${serverData.assetId}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center col-12">
+                                <button class="btn btn-lg btn-info" onclick="$('.er').CopyToClipboard()"
+                                        data-clipboard-target=".er">Copy
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </li>
             </ul>
