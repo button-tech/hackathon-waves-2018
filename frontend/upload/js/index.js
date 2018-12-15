@@ -137,3 +137,30 @@ function getFile() {
         };
     });
 }
+
+/**
+ * Request to server side
+ * @param method Using method
+ * @param url URL to send
+ * @param data request data
+ * @returns {Promise<*>}
+ */
+async function query(method, url, data) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": method,
+        "processData": false,
+    };
+
+    if (data) {
+        settings.data = data;
+        settings.headers = {
+            "Content-Type": "application/json"
+        };
+    }
+
+    const result = await $.ajax(settings);
+    return result;
+};
