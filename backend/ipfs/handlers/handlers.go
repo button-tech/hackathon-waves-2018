@@ -40,16 +40,11 @@ func SetToIpfs(c *gin.Context){
 
 func GetFromIpfs(c *gin.Context){
 
-	type Data struct {
-		Cid string `json:"cid"`
-	}
-
-	var data Data
-	c.BindJSON(&data)
-
+	hash := c.Param("hash")
+	
 	sh := shell.NewShell("35.204.142.46:5001")
 
-	cat, err := sh.Cat(data.Cid)
+	cat, err := sh.Cat(hash)
 	if err != nil {
 		fmt.Println(err)
 	}
