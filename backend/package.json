@@ -23,6 +23,7 @@
     "express": "^4.16.4",
     "merkletreejs": "0.0.20",
     "mongoose": "^5.4.0",
+    "request-promise": "^4.2.2",
     "reverse": "^4.0.1",
     "uninstall": "0.0.0",
     "waves-transactions": "^3.0.0-alpha.2"

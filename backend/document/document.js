@@ -1,6 +1,7 @@
 const {Tree, Document} = require("./../db/db");
 const MerkleTree = require("./../merkletree/merkletree");
 const dataTx = require("../waves/dataTx");
+const req = require("../request/request");
 
 async function isDocumentSigned(hash) {
     const {signatures, requiredCountOfSignatures} = await Document.get.byFileHash(hash);
@@ -22,6 +23,7 @@ function addDocument(
     digest,
     timestampOwner
 ) {
+    let ipfsDataHash = req.SetToIpfs(encryptedDataOwner, encryptedDataPartner)
     return Document.create(
         name,
         nicknameOwner,
@@ -31,7 +33,8 @@ function addDocument(
         hash,
         requiredCountOfSignatures,
         [digest],
-        timestampOwner
+        timestampOwner,
+        ipfsDataHash
     );
 }
 

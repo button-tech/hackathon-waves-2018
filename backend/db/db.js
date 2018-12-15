@@ -12,7 +12,7 @@ const Tree = {
 };
 
 const Document = {
-    create: (name, nicknameOwner, nicknamePartner, dataOwner ,dataPartner, hash, requiredCountOfSignatures, signatures, timestampOwner) => {
+    create: (name, nicknameOwner, nicknamePartner, dataOwner ,dataPartner, hash, requiredCountOfSignatures, signatures, timestampOwner, ipfsDataHash) => {
         return document.create({
             name: name,
             nicknameOwner: nicknameOwner,
@@ -22,7 +22,8 @@ const Document = {
             hash: hash,
             requiredCountOfSignatures: requiredCountOfSignatures,
             signatures: signatures,
-            timestampOwner: timestampOwner
+            timestampOwner: timestampOwner,
+            ipfsDataHash:ipfsDataHash
         });
     },
     update: {
