@@ -34,6 +34,9 @@ const Document = new Schema({
     },
     timestampPartner: {
         type: Date
+    },
+    ipfsDataHash:{
+        type:String
     }
 }, {
     versionKey: false
