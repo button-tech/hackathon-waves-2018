@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Waves Data Timestamping</title>
+</head>
+<body>
+
+<div style="margin-top: 100px" class="text-center">
+    <img style="max-width: 450px" src="logoname.png">
+    <br>
+    <!--<h1 style="color: white !important; font-family: Roboto !important;">Uploading document to verify</h1>-->
+</div>
+<div class="container col-12">
+    <div class="row">
+        <div class="col-12 text-center">
+            <br>
+            <a class="btn btn-lg btn-info cont_button" style="font-size: 40px;" id="click0">Start Sign</a>
+        </div>
+        <div class="col-md-6 offset-md-3">
+            <ul class="timeline" id="data">
+                <li id="show" style="display: none">
+                    <h2 class="Asker">Download document to verify it</h2>
+
+                    <div class="text-center col-12">
+                        <a class="btn btn-lg btn-info cont_button" id="click1">Download</a>
+                    </div>
+                </li>
+                <li id="show1" style="display: none">
+                    <h2>Please sign it</h2>
+                    <form method="post">
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Private key"
+                                   aria-label="Private key">
+                        </div>
+                    </form>
+                    <div class="text-center col-12">
+                        <a class="btn btn-lg btn-info cont_button" id="click2">Done</a>
+                    </div>
+                </li>
+
+                <li id="show2" style="display: none">
+                    <h2>This is information that allow you to verify it</h2>
+                    <h3>Please, save it</h3>
+                    <div class="container">
+                        <div class="row">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td class="er" data-clipboard-text="0x${serverData.hash}"><strong>Hash:</strong>
+                                        0x${serverData.hash === undefined ? p.getHash(file.data).substring(2) :
+                                        serverData.hash}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.timstamp}"><strong>
+                                        Timestamp:</strong> ${serverData.timstamp === undefined ? serverData.timestamp :
+                                        serverData.timstamp}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.txNumber}"><strong> Tx
+                                        Number:</strong> ${serverData.txNumber}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.assetId}"><strong> Document
+                                        Id:</strong> ${serverData.assetId}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center col-12">
+                                <button class="btn btn-lg cont_button btn-info" onclick="$('.er').CopyToClipboard()"
+                                        data-clipboard-target=".er">Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--<button onclick="main()">Получить хэш и отправить на сервер</button>-->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $('#click0').on('click', function () {
+        $('#click0').hide();
+        $('#show').show();
+    });
+    $('#click1').on('click', function () {
+        $('#click1').hide();
+        $('#show1').show();
+    });
+    $('#click2').on('click', function () {
+        $('#click4').hide();
+        $('#show2').show();
+    });
+</script>
+<script type="text/javascript"
+        src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
+<script src="index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
