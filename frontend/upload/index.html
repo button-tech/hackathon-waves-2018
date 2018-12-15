@@ -11,14 +11,17 @@
 <body>
 
 <div style="margin-top: 100px" class="text-center">
-    <img style="max-width: 550px" src="logoname.png">
+    <img style="max-width: 850px" src="logoname.png">
     <!--<h1 style="color: white !important; font-family: Roboto !important;">Uploading document to verify</h1>-->
 </div>
 <div class="container col-12">
     <div class="row">
+        <div class="col-12 text-center">
+            <a class="btn btn-lg btn-info cont_button" style="margin-right: 16px;font-size: 40px;" id="click0">Start</a>
+        </div>
         <div class="col-md-6 offset-md-3">
             <ul class="timeline" id="data">
-                <li>
+                <li id="show"style="display: none">
                     <h2 class="Asker">Upload your file</h2>
                     <div class="col-md-12 text-center">
                         <form method="post" >
@@ -28,7 +31,7 @@
                         </form>
                     </div>
                     <div class="text-center col-12">
-                        <a class="btn btn-lg btn-info" id="click1">Done</a>
+                        <a class="btn btn-lg btn-info cont_button" id="click1">Done</a>
                     </div>
                 </li>
                 <li id="show1"style="display: none">
@@ -39,7 +42,7 @@
                         </div>
                     </form>
                     <div class="text-center col-12">
-                        <a class="btn btn-lg btn-info" id="click2">Done</a>
+                        <a class="btn btn-lg btn-info cont_button" id="click2">Done</a>
                     </div>
                 </li>
             </ul>
@@ -49,6 +52,10 @@
 <!--<button onclick="main()">Получить хэш и отправить на сервер</button>-->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
+    $('#click0').on('click', function () {
+        $('#click0').hide();
+        $('#show').show();
+    });
     $('#click1').on('click', function () {
         $('#click1').hide();
         $('#show1').show();

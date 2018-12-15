@@ -3,6 +3,10 @@ body > h1, h2, h3, h4, h5 {
     color: white !important;
 }
 
+.cont_button  {
+    background-color: white !important; color: black !important; border: none !important;
+}
+
 body {
     background: black !important;
     font-family: Roboto !important;
