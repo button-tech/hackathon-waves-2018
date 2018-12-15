@@ -39,14 +39,14 @@ async function getDocument(req, res) {
     const { id } = req.params;
     const doc = await Document.getDocumentByID(id);
     if (doc !== null) {
-        res.set({
+        res.send({
             result: {
                 document: doc
             },
             error: null
         });
     } else {
-        res.set({
+        res.send({
             result: null,
             error: "Document does not exist"
         });
@@ -80,7 +80,7 @@ async function updateSignatures(req, res) {
 
 async function getOwnerDocuments(req, res) {
     const { id } = req.params;
-    const docs = Document.getDocumentByNicknameOwner(id);
+    const docs = await Document.getDocumentByNicknameOwner(id);
     if (docs.length !== 0) {
         res.send({
             result: {
@@ -98,7 +98,7 @@ async function getOwnerDocuments(req, res) {
 
 async function getPartnerDocuments(req, res) {
     const { id } = req.params;
-    const docs = Document.getDocumentByNicknamePartner(id);
+    const docs = await Document.getDocumentByNicknamePartner(id);
     if (docs.length !== 0) {
         res.send({
             result: {
@@ -127,8 +127,9 @@ async function getProof(req, res) {
     }
     const concatSignatures = doc.signatures.reduce((acc, val) => acc + val);
     const leaf = MerkleTree.SHA256(hash + concatSignatures);
-    const { tree } = Document.getTree();
+    const { tree } = await Document.getTree();
     const proof = MerkleTree.getProof(tree, leaf);
+    console.log()
     if (txNumber == doc.index) {
         res.send({
             result: {
