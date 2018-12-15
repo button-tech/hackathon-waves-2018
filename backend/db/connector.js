@@ -15,6 +15,7 @@ if (AUTH == "true")
 else
     uri = `mongodb://${url}/${dataBase}`;
 
+
 const options = {
     autoIndex: false,
     reconnectTries: Number.MAX_VALUE,

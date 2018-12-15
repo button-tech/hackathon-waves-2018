@@ -35,7 +35,10 @@ const Document = new Schema({
     timestampPartner: {
         type: Date
     },
-    ipfsDataHash:{
+    ipfsDataHashOwner:{
+        type:String
+    },
+    ipfsDataHashPartner:{
         type:String
     }
 }, {

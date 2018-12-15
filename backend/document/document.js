@@ -12,7 +12,7 @@ function getTree() {
     return Tree.get();
 }
 
-function addDocument(
+async function addDocument(
     name,
     nicknameOwner,
     nicknamePartner,
@@ -23,7 +23,8 @@ function addDocument(
     digest,
     timestampOwner
 ) {
-    let ipfsDataHash = req.SetToIpfs(encryptedDataOwner, encryptedDataPartner)
+    let ipfsDataHash = await req.SetToIpfs(encryptedDataOwner, encryptedDataPartner)
+ 
     return Document.create(
         name,
         nicknameOwner,
@@ -34,7 +35,8 @@ function addDocument(
         requiredCountOfSignatures,
         [digest],
         timestampOwner,
-        ipfsDataHash
+        ipfsDataHash.owner,
+        ipfsDataHash.partner,
     );
 }
 
