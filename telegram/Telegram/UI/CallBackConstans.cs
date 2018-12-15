@@ -8,7 +8,8 @@ namespace WavesBot.UI
     {
         Default = 0,
         Back = 1,
-        RootPage = 18,
+        RootPage = 2,
+        CreateAccount = 3
     }
 
     public static class CallBackHelper

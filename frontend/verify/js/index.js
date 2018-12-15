@@ -1,5 +1,17 @@
-const web3 = new Web3();
-const URL = 'https://productdb.bankex.team';
+async function GetDataFromIPFS(data){
+        const rawResponse = await fetch('http://localhost:8080/get/'+data);
+        const content = await rawResponse.json();
+        return content;
+}
+
+async function GetRootHashFromBlockchain(address){
+    let url = "https://testnodes.wavesnodes.com/addresses/data/" + address +"/rootHash"
+    response = await fetch(url);
+    body = await  response.json();
+    return body;
+}
+
+
 
 /**
  * Allows to send client data to server and get response

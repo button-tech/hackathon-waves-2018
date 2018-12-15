@@ -3,7 +3,7 @@ const rp = require('request-promise');
 async function SetToIpfs(dOwner, dPartner){
     var options = {
         method: 'POST',
-        uri: 'https://api.telegram.org/bot'+TOKEN+'/sendMessage',
+        uri: 'http://localhost:8080/set',
         body: {
            "document_owner":dOwner,
            "document_partner":dPartner
