@@ -9,6 +9,7 @@ namespace WavesBot.Services
     using Telegram.Bot.Types.Enums;
     using UI.Pages;
     using UI.Pages.Account;
+    using UI.Pages.Documents;
     using UI.ViewModels;
     using ViewLib.BaseNavigation;
     using ViewLib.Data;
@@ -74,7 +75,7 @@ namespace WavesBot.Services
             {
                 result = true;
                 await navigator.RemoveAllNavigationStack(identifier);
-                await navigator.PushPageAsync<TransactionPage>(identifier, update, NavigationType.PageToPage);
+                await navigator.PushPageAsync<MyDocumentsPage>(identifier, update, NavigationType.PageToPage);
             }
 
             return result;
