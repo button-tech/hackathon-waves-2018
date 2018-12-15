@@ -4,9 +4,12 @@ COPY backend/package.json .
 RUN npm install
 COPY backend .
 
-ENV AUTH=false
-ENV URL=localhost:27017
+ENV AUTH=true
+ENV URL=35.204.142.46:27017
+ENV LOGIN=root
+ENV PASSWORD=
 ENV DB=admin
+
 ENV SEED="huge pool glance daring own category scout dignity impulse field furnace pencil mistake spawn trac"
 
 EXPOSE 3000
