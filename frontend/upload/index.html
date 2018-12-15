@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Waves Data Timestamping</title>
+</head>
+<body>
+
+<div style="margin-top: 100px" class="text-center">
+    <img style="max-width: 550px" src="logoname.png">
+    <!--<h1 style="color: white !important; font-family: Roboto !important;">Uploading document to verify</h1>-->
+</div>
+<div class="container col-12">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <ul class="timeline" id="data">
+                <li>
+                    <h2 class="Asker">Upload your file</h2>
+                    <div class="col-md-12 text-center">
+                        <form method="post" >
+                            <div class="form-group files">
+                                <input type="file" class="form-control" multiple="">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="text-center col-12">
+                        <a class="btn btn-lg btn-info" id="click1">Done</a>
+                    </div>
+                </li>
+                <li id="show1"style="display: none">
+                    <h2>Please sign it</h2>
+                    <form method="post">
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Private key" aria-label="Private key">
+                        </div>
+                    </form>
+                    <div class="text-center col-12">
+                        <a class="btn btn-lg btn-info" id="click2">Done</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--<button onclick="main()">Получить хэш и отправить на сервер</button>-->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $('#click1').on('click', function () {
+        $('#click1').hide();
+        $('#show1').show();
+    });
+    $('#click2').on('click', function () {
+        $('#click4').hide();
+        $('#show2').show();
+    });
+</script>
+<script type="text/javascript"
+        src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
+<script src="index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
