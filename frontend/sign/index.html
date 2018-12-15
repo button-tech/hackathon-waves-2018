@@ -27,19 +27,17 @@
                     <h2 class="Asker">Download document to verify it</h2>
 
                     <div class="text-center col-12">
+                        <input type="password" class="form-control" placeholder="Private key"
+                               aria-label="Private key">
+                        <br>
+                        <br>
                         <a class="btn btn-lg btn-info cont_button" id="click1">Download</a>
                     </div>
                 </li>
                 <li id="show1" style="display: none">
                     <h2>Please sign it</h2>
-                    <form method="post">
-                        <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Private key"
-                                   aria-label="Private key">
-                        </div>
-                    </form>
                     <div class="text-center col-12">
-                        <a class="btn btn-lg btn-info cont_button" id="click2">Done</a>
+                        <a class="btn btn-lg btn-info cont_button" id="click2">Sign</a>
                     </div>
                 </li>
 
@@ -59,8 +57,11 @@
                                         Timestamp:</strong> ${serverData.timstamp === undefined ? serverData.timestamp :
                                         serverData.timstamp}
                                     </td>
-                                    <td class="er" data-clipboard-text="${serverData.txNumber}"><strong> Tx
-                                        Number:</strong> ${serverData.txNumber}
+                                    <td class="er" data-clipboard-text="${serverData.txNumber}"><strong>Owner Signature
+                                        :</strong> ${serverData.txNumber}
+                                    </td>
+                                    <td class="er" data-clipboard-text="${serverData.txNumber}"><strong>My Signature
+                                        :</strong> ${serverData.txNumber}
                                     </td>
                                     <td class="er" data-clipboard-text="${serverData.assetId}"><strong> Document
                                         Id:</strong> ${serverData.assetId}
