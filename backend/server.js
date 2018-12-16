@@ -35,6 +35,14 @@ app.post('/upload', async (req, res) => await handlers.addDocument(req, res));
 app.get('/download/:id', async (req, res) => await handlers.getDocument(req,res));
 
 /*
+    return {
+        result: document{},
+        error: null
+    }
+ */
+app.get('/getDocument/:hash', async (req, res) => await handlers.getDocumentByHash(req,res));
+
+/*
     {
         signaturePartner,
         timestampPartner
