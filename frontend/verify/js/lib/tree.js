@@ -20,10 +20,10 @@ function verify(proof, targetNode, root, hashFunc) {
         const node = proof[i];
         const isLeftNode = (node.position === 'left')
         const buffers = [hash];
-        buffers[isLeftNode ? 'unshift' : 'push'](node.data)
+        console.log(Buffer(node.data.data))
+        buffers[isLeftNode ? 'unshift' : 'push'](Buffer(node.data.data))
         hash = bufferify(hashFunc(Buffer.concat(buffers)))
     }
-
     return Buffer.compare(hash, root) === 0
 }
 
