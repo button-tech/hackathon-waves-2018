@@ -29,7 +29,7 @@ function startTimer(duration, display) {
             closeLoader();
 
         if (--timer < 0) {
-            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+            addWarning("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot");
             clearInterval(bomb)
         }
     }, 1000);
@@ -42,8 +42,8 @@ function startTimer(duration, display) {
     const now = Date.now();
     const difference = Number(deleteDate) - now;
     if (difference <= 0) {
-        addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта", linkToBot);
-        throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+        addWarning("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot", linkToBot);
+        throw new Error("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot");
     }
 
     const differenceInMinute = difference / 1000 / 60;
@@ -59,14 +59,14 @@ async function getLinkLivetime() {
     try {
         const response = await req('GET', `${telegramServiceURL}/api/blockchain/validator/${link}`);
         if (response.error){
-            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+            addWarning("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot");
             return response.error;
         }
         else
             return new Date(response.result).getTime();
     } catch (e) {
-        addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
-        throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+        addWarning("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot");
+        throw new Error("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot");
     }
     // return 9999999999999;
 }
@@ -85,10 +85,10 @@ async function generate() {
         <div class="container text-center">
             <br>
             <br>
-            <h1>Private Key - это доступ в Ваш аккаунт</h1>
+            <h1>You are all set! This is your Private Key</h1>
             <br>
-            <h4>Он сохранится в файле RSAPrivateKey.txt</h4>
-            <h5>Сохраните в надежное место и не потеряйте его!</h5>
+            <h4>Private key was saved in RSAPrivateKey.txt</h4>
+            <h5>Don't loose it or you will loose everything!</h5>
        
         </div>
         <div class="row">
@@ -152,9 +152,9 @@ async function sendAddresses(addresses, shortlink) {
         const response = await req('PUT', queryURL, JSON.stringify(data));
         return response;
         if (response.error != null)
-            throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+            throw new Error("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot");
     } catch (e) {
-        addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта", linkToBot);
+        addWarning("The link has been removed for your safety. New link has been sent\nto you. Go back to the Telegram Bot", linkToBot);
         return e;
     }
 
