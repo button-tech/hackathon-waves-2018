@@ -13,6 +13,17 @@ async function GetRootHashFromBlockchain(address){
     return response.json();
 }
 
+function getInfoFromInputs(){
+    let ownerPubKey = document.getElementByID("ownp").value;
+    let partnerPubKey = document.getElementByID("partp").value;
+    let documentHash = document.getElementByID("dochash").value;
+    let ownerSignature = document.getElementByID("ownsign").value;
+    let partnerSignature = document.getElementByID("partsign").value;
+    
+    let leave = CryptoJS.SHA256(documentHash+ownerSignature+partnerSignature)
+
+}
+
 async function Verify(hash) {
     const { index, signatures, timestampOwner, timestampPartner } = (await query("GET", `${backendURL}/getDocument/${hash}`)).result.document;
     const concatSignatures = signatures.reduce((acc, val) => acc + val);
