@@ -1,5 +1,5 @@
 const backendURL = "http://localhost:3000";
-const ipfsServiceURL = 'http://localhost:8080/get/;
+const ipfsServiceURL = 'http://localhost:8080/get/';
 const telegramServiceURL = "";
 const masterAddress = "3N1yku2yYUB1QkQKsRR3fX5Dv9LxJFWk2gm";
 
@@ -14,32 +14,41 @@ async function GetRootHashFromBlockchain(address){
     return response.json();
 }
 
-function getInfoFromInputs(){
-    let ownerPubKey = document.getElementByID("ownp").value;
-    let partnerPubKey = document.getElementByID("partp").value;
-    let documentHash = document.getElementByID("dochash").value;
-    let ownerSignature = document.getElementByID("ownsign").value;
-    let partnerSignature = document.getElementByID("partsign").value;
-   
-    const isVerify = await Verify(documentHash);
-    if (isVerify) {
-        document.getElementById("is-verify-proof").innerText = `
-        <h1 style="color: green !important;">Yes</h1>`;
-    } else {
-        document.getElementById("is-verify-proof").innerText = `
-        <h1 style="color: red !important;">No</h1>`
-    }
+async function getInfoFromInputs(){
+    let ownerPubKey = document.getElementById("ownp").value;
+    let partnerPubKey = document.getElementById("partp").value;
+    let documentHash = document.getElementById("dochash").value;
+    let ownerSignature = document.getElementById("ownsign").value;
+    let partnerSignature = document.getElementById("partsign").value;
 
-    if (
-        verifySignature(getPubKeyObj(ownerPubKey), documentHash, ownerSignature) && 
-        verifySignature(getPubKeyObj(partnerPubKey), documentHash, partnerSignature)
+    try {
+        const isVerify = await Verify(documentHash);
+        if (isVerify) {
+            document.getElementById("is-verify-proof").innerHTML = `
+        <h1 style="color: green !important;">Yes</h1>`;
+        } else {
+            document.getElementById("is-verify-proof").innerHTML = `
+        <h1 style="color: red !important;">No</h1>`
+        }
+
+        if (
+            verifySignature(getPubKeyObj(ownerPubKey), documentHash, ownerSignature) &&
+            verifySignature(getPubKeyObj(partnerPubKey), documentHash, partnerSignature)
         ) {
-            document.getElementById("is-verify-signatures").innerText = `
+            document.getElementById("is-verify-signatures").innerHTML = `
             <h1 style="color: green !important;">Yes</h1>`;
         } else {
-            document.getElementById("is-verify-signatures").innerText = `
+            document.getElementById("is-verify-signatures").innerHTML = `
                         <h1 style="color: red !important;">No</h1>`;
         }
+    } catch (e) {
+        console.log(e);
+            document.getElementById("is-verify-proof").innerHTML = `
+        <h1 style="color: red !important;">No</h1>`
+
+            document.getElementById("is-verify-signatures").innerHTML = `
+                        <h1 style="color: red !important;">No</h1>`;
+    }
 }
 
 function getPubKeyObj(pubKey) {
