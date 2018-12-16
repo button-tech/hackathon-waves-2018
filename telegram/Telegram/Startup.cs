@@ -33,13 +33,14 @@
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<UserDataDbContext>(ServiceLifetime.Transient);
 
 #if DEBUG
+            services.AddDbContext<UserDataDbContext>(ServiceLifetime.Transient);
             var conn = "SqlDB";
             services.Configure<SqlServerConfiguration>(options => { options.ConnectionString = conn; });
 #elif DEV || STAGE
+services.AddEntityFrameworkNpgsql()
+                .AddDbContext<UserDataDbContext>(ServiceLifetime.Transient);
             services.Configure<SqlServerConfiguration>(options =>
             {
                 options.ConnectionString = Environment.GetEnvironmentVariable(EnvironmentVariables.Postgre);
@@ -53,16 +54,12 @@
                 BotToken = Environment.GetEnvironmentVariable(EnvironmentVariables.BotToken),
                 LoggerBotToken = Environment.GetEnvironmentVariable(EnvironmentVariables.LoggerBotToken)
             };
-
             container.UseInstance(botConfiguration);
-
 
             var blockChainConfiguration = new BlockChainConfiguration
             {
                 BlockChainAddress = Environment.GetEnvironmentVariable(EnvironmentVariables.BlockChainAddress)
             };
-
-
             container.UseInstance(blockChainConfiguration);
 
 
@@ -73,12 +70,9 @@
             {
                 Timeout = TimeSpan.FromSeconds(2),
             };
-            
-
-            container.UseInstance(botConfiguration);
-
 
             container.UseInstance(apiClient);
+
 
             container.UseInstance<Func<DateTimeOffset>>(() => DateTimeOffset.UtcNow);
 
@@ -93,8 +87,9 @@
                 () => ConnectionMultiplexer.Connect($"{redisHost}:{redisPort},allowAdmin=true,password={redisPassword}",
                     textWriter));
 #elif DEBUG || DEV
-            var redisIp = System.Net.Dns.GetHostEntryAsync(redisHost).Result.AddressList.Last();
-            container.UseInstance<Func<ConnectionMultiplexer>>(() => ConnectionMultiplexer.Connect($"{redisIp}:{redisPort}", textWriter));
+            var redisIp = System.Net.Dns.GetHostEntryAsync(redisHost).Result.AddressList.First();
+            container.UseInstance<Func<ConnectionMultiplexer>>(() =>
+                ConnectionMultiplexer.Connect($"{redisIp}:{redisPort}", textWriter));
 #endif
             var serviceProvider = container.WithDependencyInjectionAdapter(services, throwIfUnresolved: type => true);
 
@@ -113,9 +108,7 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app,
-            IContainer container,
-            UserDataDbContext dbContext)
+        public void Configure(IApplicationBuilder app, UserDataDbContext dbContext)
         {
 #if RELEASE
             app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -134,10 +127,8 @@
 
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
-#if TECHWORKS
-#else
+            
             InitDb(dbContext);
-#endif
 
             app.UseMvc();
         }

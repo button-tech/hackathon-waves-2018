@@ -12,9 +12,9 @@ namespace WavesBot.Data
             connectionString = config.Value.ConnectionString;
         }
 
-        public DbSet<UserData> TelegramUsers { get; }
+        public DbSet<UserData> TelegramUsers { get; set; }
 
-        public DbSet<DocumentData> Documents { get; }
+        public DbSet<DocumentData> Documents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

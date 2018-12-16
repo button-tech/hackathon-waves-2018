@@ -5,11 +5,13 @@ namespace WavesBot
     using System.Linq;
     using System.Reflection;
     using DryIoc;
+    using IAL;
     using Services;
     using UI.Pages;
     using UI.ViewModels;
     using ViewLib.BaseNavigation;
     using ViewLib.Services;
+    using LoggerService = Services.LoggerService;
 
     public class IocModule
     {
@@ -19,9 +21,11 @@ namespace WavesBot
             builder.Register<AccountService>(Reuse.Singleton);
             builder.Register<GuidService>(Reuse.Singleton);
             builder.Register<StateSynchronizer>(Reuse.Singleton);
+            builder.Register<UserProvider>(Reuse.Singleton);
             
             builder.Register<IRootPage, TelegramRootPage>(Reuse.Singleton);
             builder.Register<ILoggerService, LoggerService>(Reuse.Singleton);
+            builder.Register<IUserDataRepository, UserDataRepository>(Reuse.Singleton);
 
             builder.RegisterMany(GetAssemblyPageTypes());
             builder.RegisterMany(GetAssemblyViewModelsTypes());

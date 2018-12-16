@@ -54,7 +54,7 @@ namespace WavesBot.Services
         public async Task<bool> IsRegisteredAsync(long identifier)
         {
             var user = await ReadUser(identifier);
-            return !string.IsNullOrEmpty(user?.WavesAddress);
+            return !string.IsNullOrEmpty(user?.RsaPublicKey);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace WavesBot.Services
         {
             var user = await userProvider.GetAsync(identifier);
 
-            user.WavesAddress = default(string);
+            user.RsaPublicKey = default(string);
 
             await userProvider.UpdateAsync(user);
         }

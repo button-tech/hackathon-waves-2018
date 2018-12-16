@@ -8,6 +8,6 @@ namespace WavesBot.Data
 
         public string NickName { get; set; }
 
-        public string WavesAddress { get; set; }
+        public string RsaPublicKey { get; set; }
     }
 }
