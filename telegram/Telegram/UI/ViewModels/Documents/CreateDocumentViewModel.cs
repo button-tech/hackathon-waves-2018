@@ -44,5 +44,5 @@ namespace WavesBot.UI.ViewModels.Documents
 
             return $"{config.BlockChainAddress}/upload/?create={guid}";
         }
-    }
+    }    
 }

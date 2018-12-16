@@ -119,7 +119,6 @@ namespace WavesBot.Controllers
             }
 
             var guidStamp = await guidService.GetGuidStamp(guid);
-            await guidService.DeleteGuid(guid);
 
             var waves = guidStamp.WavesData;
             return Json(new
@@ -147,7 +146,6 @@ namespace WavesBot.Controllers
             }
 
             var guidStamp = await guidService.GetGuidStamp(guid);
-            await guidService.DeleteGuid(guid);
 
             var waves = guidStamp.WavesData;
 
@@ -220,13 +218,14 @@ namespace WavesBot.Controllers
 
             var guidStamp = await guidService.GetGuidStamp(guid);
 
-            var owner = await accountService.ReadUser(guidStamp.Identifier);
+            var partner = await accountService.ReadUser(guidStamp.Identifier);
 
-            var document = await documentDataRepository.ReadAsync(owner.Identifier);
+            var document = await documentDataRepository.ReadAsync(partner.Identifier);
 
             return Json(new
             {
-                document.DocumentId
+                publicKeyPartner = partner.RsaPublicKey,
+                documentId = document.DocumentId
             });
         }
 

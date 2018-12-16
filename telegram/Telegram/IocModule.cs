@@ -27,6 +27,7 @@ namespace WavesBot
             builder.Register<IRootPage, TelegramRootPage>(Reuse.Singleton);
             builder.Register<ILoggerService, LoggerService>(Reuse.Singleton);
             builder.Register<IUserDataRepository, UserDataRepository>(Reuse.Singleton);
+            builder.Register<IDocumentDataRepository, DocumentDataRepository>(Reuse.Singleton);
 
             builder.RegisterMany(GetAssemblyPageTypes());
             builder.RegisterMany(GetAssemblyViewModelsTypes());

@@ -14,7 +14,7 @@ namespace WavesBot.UI.Pages.Documents
 
         protected override Task Message()
         {
-            if (viewModel.MessageText == "Создать документ")
+            if (viewModel.MessageText == "Create document")
                 return Task.CompletedTask;
             
             viewModel.SetUserPartnerNick(viewModel.MessageText?.Replace("@", ""));
@@ -25,7 +25,7 @@ namespace WavesBot.UI.Pages.Documents
 
         protected override Task Default()
         {
-            var text = "Введите ник пользователя (@nickname)";
+            var text = "Enter partner nickname (@nickname)";
             viewModel.SendMessage.Execute(text);
             return base.Default();
         }

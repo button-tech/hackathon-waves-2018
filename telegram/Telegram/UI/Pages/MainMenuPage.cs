@@ -18,16 +18,16 @@ namespace WavesBot.UI.Pages
         {
             var replyMenu = new ReplyMenu
             {
-                Text = "Главное меню",
+                Text = "Main menu",
                 Keyboard = new ReplyKeyboardMarkup(new[]
                 {
                     new[]
                     {
-                        new KeyboardButton("Создать документ")
+                        new KeyboardButton("Create document")
                     },
                     new[]
                     {
-                        new KeyboardButton("Мои документы")
+                        new KeyboardButton("My documents")
                     }
                 }, true)
             };
@@ -38,12 +38,12 @@ namespace WavesBot.UI.Pages
 
         protected override Task Navigation()
         {
-            if (viewModel.MessageText == "Создать документ")
+            if (viewModel.MessageText == "Create document")
             {
                 viewModel.GoToCreateDocumentPage.Execute();
             }
 
-            if (viewModel.MessageText == "Мои документы")
+            if (viewModel.MessageText == "My documents")
             {
                 viewModel.GoToMyDocumentsPage.Execute();
             }
