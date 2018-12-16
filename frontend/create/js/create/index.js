@@ -1,5 +1,7 @@
 checkPwd();
 
+const telegramServiceURL = "";
+
 // TODO
 
 // const linkToBot = `
@@ -109,16 +111,16 @@ async function generate() {
     download("RSAPrivateKey.txt",privateKey);
 
     // TODO: prod url
-    const resp = await fetch('http://localhost', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({RsaPublicKey:publicKey})
-    });
-
-    const content = await resp.json();
+    // const resp = await fetch(`${telegramServiceURL}/`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({RsaPublicKey:publicKey})
+    // });
+    //
+    // const content = await resp.json();
 
     closeLoader();
 }
