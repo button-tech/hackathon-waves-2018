@@ -3,6 +3,7 @@ namespace WavesBot.IAL
     using System.Threading.Tasks;
     using Configuration;
     using Data;
+    using Repositories;
     using Utf8Json;
     using ViewLib.Repositories;
 

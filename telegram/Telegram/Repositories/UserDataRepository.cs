@@ -1,4 +1,4 @@
-namespace WavesBot.IAL
+namespace WavesBot.Repositories
 {
     using System;
     using System.Linq;
