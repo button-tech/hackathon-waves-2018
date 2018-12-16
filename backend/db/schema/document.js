@@ -11,7 +11,7 @@ const Document = new Schema({
         type: String
     },
     dataPartner: {
-        String
+        type: String
     },
     hash: {
       type: String

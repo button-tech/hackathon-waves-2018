@@ -21,6 +21,7 @@ async function addDocument(req, res) {
         signatureOwner,
         timestampOwner
         );
+    console.log(documentPartner);
     const id = doc._id;
     if (id) {
         res.send({
