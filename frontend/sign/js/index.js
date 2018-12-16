@@ -94,11 +94,11 @@ async function sign() {
 
 }
 
-function sendSignature(signature, timestamp) {
-    return query("POST", `${backendURL}/sign/${id}`, JSON.stringify({
+async function sendSignature(signature, timestamp) {
+    return (await query("POST", `${backendURL}/sign/${id}`, JSON.stringify({
         signaturePartner: signature,
         timestampPartner: timestamp
-    }));
+    }))).result;
 }
 
 function signData(clientKey, data) {
