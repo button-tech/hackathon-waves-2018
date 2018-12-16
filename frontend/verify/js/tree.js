@@ -1,84 +1,65 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.MerkleTree = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.verify = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function (Buffer){
 const MerkleTree = require('merkletreejs');
+const reverse = require('buffer-reverse')
 const SHA256 = require('crypto-js/sha256');
+const CryptoJS = require('crypto-js');
 
-function buildMerkleTree(leaves, hashFunc) {
-    const tree = new MerkleTree(leaves, hashFunc);
-    const root = "0x" + tree.getRoot().toString('hex');
-    return {
-        tree: tree,
-        root: root
+function verify(proof, targetNode, root, hashFunc) {
+    let hash = bufferify(targetNode)
+    root = bufferify(root)
+
+    if (!Array.isArray(proof) ||
+        !proof.length ||
+        !targetNode ||
+        !root) {
+        return false
+    }
+
+    for (let i = 0; i < proof.length; i++) {
+        const node = proof[i];
+        const isLeftNode = (node.position === 'left')
+        const buffers = [hash];
+        console.log(Buffer(node.data.data))
+        buffers[isLeftNode ? 'unshift' : 'push'](Buffer(node.data.data))
+        hash = bufferify(hashFunc(Buffer.concat(buffers)))
+    }
+    return Buffer.compare(hash, root) === 0
+}
+
+function bufferify(x) {
+    if (!Buffer.isBuffer(x)) {
+        if (typeof x === 'object' && x.words) {
+            return Buffer.from(x.toString(CryptoJS.enc.Hex), 'hex')
+        } else if (isHexStr(x)) {
+            return Buffer.from(x, 'hex')
+        } else if (typeof x === 'string') {
+            return Buffer.from(x)
+        }
+    }
+
+    return x
+}
+
+function isHexStr(v) {
+    return (typeof v === 'string' && /^(0x)?[0-9A-Fa-f]*$/.test(v))
+}
+
+function bufferifyFn (f) {
+    return function (x) {
+        const v = f(x)
+        if (Buffer.isBuffer(v)) {
+            return v
+        }
+
+        // crypto-js support
+        return Buffer.from(f(CryptoJS.enc.Hex.parse(x.toString('hex'))).toString(CryptoJS.enc.Hex), 'hex')
     }
 }
 
-function getLeaves(tree) {
-    return tree.leaves.map(l => l.toString('hex'));
-}
-
-function rebuildMerkleTree(tree, newLeaves, hashFunc) {
-    let leaves = getLeaves(tree).concat(newLeaves);
-    return buildMerkleTree(leaves, hashFunc);
-}
-
-function getProof(tree, leaf) {
-    const leaves = tree.leaves.map(l => l.toString('hex'));
-    const t = buildMerkleTree(leaves, SHA256);
-    const proof =  t.tree.getProof(leaf);
-    return proof;
-}
-
-        function verify(proof, targetNode, root, hashFunc) {
-            let hash = bufferify(targetNode)
-            root = bufferify(root)
-
-            if (!Array.isArray(proof) ||
-                !proof.length ||
-                !targetNode ||
-                !root) {
-                return false
-            }
-
-            for (let i = 0; i < proof.length; i++) {
-                const node = proof[i];
-                const isLeftNode = (node.position === 'left')
-                const buffers = [hash];
-                console.log(Buffer(node.data.data))
-                buffers[isLeftNode ? 'unshift' : 'push'](Buffer(node.data.data))
-                hash = bufferify(hashFunc(Buffer.concat(buffers)))
-            }
-            return Buffer.compare(hash, root) === 0
-        }
-
-        function bufferify(x) {
-            if (!Buffer.isBuffer(x)) {
-                if (typeof x === 'object' && x.words) {
-                    return Buffer.from(x.toString(CryptoJS.enc.Hex), 'hex')
-                } else if (isHexStr(x)) {
-                    return Buffer.from(x, 'hex')
-                } else if (typeof x === 'string') {
-                    return Buffer.from(x)
-                }
-            }
-
-            return x
-        }
-
-        function isHexStr(v) {
-            return (typeof v === 'string' && /^(0x)?[0-9A-Fa-f]*$/.test(v))
-        }
-
-// verify(proof, lea)
-
-module.exports = {
-    MerkleTree: MerkleTree,
-    buildMerkleTree: buildMerkleTree,
-    rebuildMerkleTree: rebuildMerkleTree,
-    getProof: getProof,
-    getLeaves: getLeaves,
-    SHA256: SHA256,
-    verify: verify
-};
-},{"crypto-js/sha256":31,"merkletreejs":37}],2:[function(require,module,exports){
+module.exports = verify
+}).call(this,require("buffer").Buffer)
+},{"buffer":40,"buffer-reverse":2,"crypto-js":11,"crypto-js/sha256":31,"merkletreejs":37}],2:[function(require,module,exports){
 (function (Buffer){
 module.exports = function reverse (src) {
   var buffer = new Buffer(src.length)
@@ -6739,7 +6720,12 @@ class MerkleTree {
    * const tree = new MerkleTree(leaves, sha256)
    */
   constructor(leaves, hashAlgorithm, options={}) {
-    this.hashAlgo = bufferifyFn(hashAlgorithm);
+    this.hashAlgo = bufferifyFn(hashAlgorithm)
+    this.leaves = leaves.map(bufferify)
+    this.layers = [this.leaves]
+    this.isBitcoinTree = !!options.isBitcoinTree
+
+    this.createHashes(this.leaves)
   }
 
   // TODO: documentation
@@ -6924,8 +6910,8 @@ class MerkleTree {
    *
    */
   verify(proof, targetNode, root) {
-    let hash = new Uint8Array(targetNode)
-    root = new Uint8Array(root)
+    let hash = bufferify(targetNode)
+    root = bufferify(root)
 
     if (!Array.isArray(proof) ||
         !proof.length ||
@@ -6935,16 +6921,25 @@ class MerkleTree {
     }
 
     for (let i = 0; i < proof.length; i++) {
-        const node = proof[i]
-        const isLeftNode = (node.position === 'left')
-        const buffers = []
+      const node = proof[i]
+      const isLeftNode = (node.position === 'left')
+      const buffers = []
 
+      if (this.isBitcoinTree) {
+        buffers.push(reverse(hash))
+
+        buffers[isLeftNode ? 'unshift' : 'push'](reverse(node.data))
+
+        hash = this.hashAlgo(Buffer.concat(buffers))
+        hash = reverse(this.hashAlgo(hash))
+
+      } else {
         buffers.push(hash)
 
-        buffers[isLeftNode ? 'unshift' : 'push'](new Uint8Array(node.data.data))
-		console.log(buffers)
+        buffers[isLeftNode ? 'unshift' : 'push'](node.data)
 
-        hash = new Uint8Array(this.hashAlgo(Buffer.concat(buffers)))
+        hash = this.hashAlgo(Buffer.concat(buffers))
+      }
     }
 
     return Buffer.compare(hash, root) === 0
