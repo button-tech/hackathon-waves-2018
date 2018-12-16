@@ -13,6 +13,7 @@ const Tree = {
 
 const Document = {
     create: (name, nicknameOwner, nicknamePartner, dataOwner ,dataPartner, hash, requiredCountOfSignatures, signatures, timestampOwner, ipfsDataHashOwner,ipfsDataHashPartner) => {
+        console.log(dataPartner)
         return document.create({
             name: name,
             nicknameOwner: nicknameOwner,

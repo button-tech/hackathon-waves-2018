@@ -1,5 +1,5 @@
-const backendURL = "http://localhost:3000";
-const telegramServiceURL = "https://6d3b0806.ngrok.io";
+const backendURL = "https://c38659f5.ngrok.io";
+const telegramServiceURL = "https://6d3b0806.ngrok.io/api/blockchain";
 
 async function uploadFile() {
     const { data, name } = await getFile();
@@ -11,7 +11,7 @@ async function uploadFile() {
         publicKeyPartner,
         nicknameOwner,
         nicknamePartner
-    } = await getData();
+    } = await getData(getShortlink());
 
     if (getClientPublicKey(keyPair) != publicKeyOwner) {
        alert("Private Key неверный");
@@ -49,7 +49,7 @@ async function uploadFile() {
                                     <td class="er" data-clipboard-text="0x${hash}"><strong>Hash:</strong>
                                         <span id="hash">0x${hash}</span>
                                     </td>
-                                    <td class="er" data-clipboard-text="${new Date(timestampOwner).toDateString()}"><strong>
+                                    <td style="max-width: 100px" class="er" data-clipboard-text="${new Date(timestampOwner).toDateString()}"><strong>
                                         Timestamp:</strong> <span id="timestamp">${new Date(timestampOwner).toDateString()}</span>
                                     </td>
                                     <td class="er" data-clipboard-text="${signature.toString()}"><strong> My Signature:</strong>
@@ -79,7 +79,7 @@ function getClientPublicKey(clientKeyPair) {
     return clientKeyPair.exportKey('pkcs1-public');
 }
 
-function sendUploadedFile(
+async function sendUploadedFile(
     documentOwner,
     documentPartner,
     hash,
@@ -89,7 +89,7 @@ function sendUploadedFile(
     nicknamePartner,
     name
 ) {
-    return query("POST", `${backendURL}/upload`, JSON.stringify({
+    return await query("POST", `${backendURL}/upload`, JSON.stringify({
         documentOwner: documentOwner,
         documentPartner: documentPartner,
         hash: hash,
@@ -199,7 +199,7 @@ function startTimer(duration, display) {
 async function getLinkLivetime() {
     const link = getShortlink();
     try {
-        const response = await req('GET', `${telegramServiceURL}/api/blockchain/validator/${link}`);
+        const response = await req('GET', `${telegramServiceURL}/validator/${link}`);
         if (response.error){
             addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
             return response.error;
@@ -225,6 +225,23 @@ function getShortlink() {
     });
 
     return urlData.create;
+}
+
+function parseURL(url) {
+    try {
+        const params = url.search.substring(1);
+        return JSON.parse(
+            '{"' +
+            decodeURI(params)
+                .replace(/"/g, '\\"')
+                .replace(/&/g, '","')
+                .replace(/=/g, '":"') +
+            '"}'
+        );
+    } catch (e) {
+        addError("Pes not defined");
+        throw e;
+    }
 }
 
 /**
