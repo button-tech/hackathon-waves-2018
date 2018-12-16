@@ -19,7 +19,7 @@ namespace ViewLib.Services
                                .Substring(0, 5);
 
 #if RELEASE
-            devKey = string.Empty;
+            devKey = "waves";
 #endif
         }
 

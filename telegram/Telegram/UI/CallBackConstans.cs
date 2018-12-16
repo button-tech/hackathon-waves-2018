@@ -21,10 +21,5 @@ namespace WavesBot.UI
         {
             return !string.IsNullOrEmpty(inp) ? CallBacks.SingleOrDefault(x => x.ToString() == inp) : CallBack.Default;
         }
-
-        public static string Name(this CallBack callBack)
-        {
-            return callBack.ToString();
-        }
     }
 }

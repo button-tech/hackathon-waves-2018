@@ -1,5 +1,6 @@
 namespace WavesBot.Services
 {
+    using Configuration;
     using Telegram.Bot;
 
     public class BotService
