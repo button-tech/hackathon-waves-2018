@@ -97,8 +97,8 @@ async function updateSignatures(req, res) {
 }
 
 async function getOwnerDocuments(req, res) {
-    const { id } = req.params;
-    const docs = await Document.getDocumentByNicknameOwner(id);
+    const { nickname } = req.params;
+    const docs = await Document.getDocumentByNicknameOwner(nickname);
     if (docs.length !== 0) {
         res.send({
             result: {
@@ -115,8 +115,8 @@ async function getOwnerDocuments(req, res) {
 }
 
 async function getPartnerDocuments(req, res) {
-    const { id } = req.params;
-    const docs = await Document.getDocumentByNicknamePartner(id);
+    const { nickname } = req.params;
+    const docs = await Document.getDocumentByNicknamePartner(nickname);
     if (docs.length !== 0) {
         res.send({
             result: {

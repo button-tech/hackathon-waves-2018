@@ -68,6 +68,8 @@ async function uploadFile() {
                             </div>
                         </div>
                     </div>`;
+
+        sendDocumentId(result, getShortlink());
     } else {
         alert("Ошибка при загрузке");
     }
@@ -77,7 +79,7 @@ function getClientPublicKey(clientKeyPair) {
     return clientKeyPair.exportKey('pkcs1-public');
 }
 
-async function sendUploadedFile(
+function sendUploadedFile(
     documentOwner,
     documentPartner,
     hash,
@@ -87,11 +89,24 @@ async function sendUploadedFile(
     nicknamePartner,
     name
 ) {
-
+    return query("POST", `${backendURL}/upload`, JSON.stringify({
+        documentOwner: documentOwner,
+        documentPartner: documentPartner,
+        hash: hash,
+        timestampOwner: timestampOwner,
+        signatureOwner: signatureOwner,
+        nicknameOwner: nicknameOwner,
+        nicknamePartner: nicknamePartner,
+        name: name
+    }));
 }
 
-async function getData() {
-    return {};
+function sendDocumentId(id, guid) {
+    query("POST", `${telegramServiceURL}/documentData/${guid}`, JSON.stringify({documentId: id}))
+}
+
+function getData(guid) {
+    return query("GET", `${telegramServiceURL}/documentData/${guid}`);
 }
 
 /**
