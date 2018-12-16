@@ -108,21 +108,24 @@ async function generate() {
             </div>
         </div>
     `;
-    download("RSAPrivateKey.txt",privateKey);
+    download("RSAPrivateKey.txt", privateKey);
+    
+    const resp = await fetch(`${telegramServiceURL}/`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({RsaPublicKey: publicKey})
+    });
 
-    // TODO: prod url
-    // const resp = await fetch(`${telegramServiceURL}/`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({RsaPublicKey:publicKey})
-    // });
-    //
-    // const content = await resp.json();
-
-    closeLoader();
+    const content = resp.json();
+    content
+        .then(() => closeLoader())
+        .catch((err) => {
+            alert(err);
+            closeLoader();
+        });
 }
 
 function download(filename, text) {
