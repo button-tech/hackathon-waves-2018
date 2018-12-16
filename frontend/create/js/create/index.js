@@ -85,7 +85,7 @@ async function generate() {
         <div class="container text-center">
             <br>
             <br>
-            <h1>Private Key код - это доступ в Ваш аккаунт</h1>
+            <h1>Private Key - это доступ в Ваш аккаунт</h1>
             <br>
             <h4>Он сохранится в файле RSAPrivateKey.txt</h4>
             <h5>Сохраните в надежное место и не потеряйте его!</h5>
