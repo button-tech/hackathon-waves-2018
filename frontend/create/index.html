@@ -35,43 +35,10 @@
             <p align="center" style="font-size: 20px;"><strong style="color: black">Сведения о безопасности:</strong> у Вас есть
                 <span id="time"></span> минут для создания кошелька</p>
             <br>
-            <form method="post" id="passwordForm">
-                <div class="text-center">
-                    <h2>Создайте пароль</h2>
-                </div>
-                <br>
-                <br>
-                <input type="password" class="input-lg form-control text-center" name="password1" id="password1"
-                       placeholder="New Password" autocomplete="off">
-                <div class="row">
-                    <div class="col-sm-6 text-center">
-                        <br>
-                        <p class="qsp"><span id="8char" class="fa fa-remove" style="color:#FF0004;"></span> Минимум 8 символов</p><br>
-                        <p class="qsp"><span id="ucase" class="fa fa-remove" style="color:#FF0004;"></span> Заглавные буквы</p><br>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <br>
-                        <p class="qsp"><span id="lcase" class="fa fa-remove" style="color:#FF0004;"></span>Строчные буквы</p><br>
-                        <p class="qsp"><span id="num" class="fa fa-remove" style="color:#FF0004;"></span>Цифры</p>
-                        <br>
-                    </div>
-                </div>
-                <br>
-                <input type="password" class="input-lg form-control text-center" name="password2" id="password2"
-                       placeholder="Повторите пароль" autocomplete="off">
-                <div class="row">
-                    <div class="col-sm-12 text-center">
-                        <br>
-                        <p class="qsp"><span id="pwmatch" class="fa fa-remove" style="color:#FF0004;"></span>Пароли совпадают</p>
-                        <br>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <h5>Запомните Ваш пароль! Его невозможно восстановить!</h5>
-                    <br>
-                    <input type="button" onclick="generatePicture()" class="col-xs-12 btn btn-primary btn-load btn-lg"
-                           data-loading-text="Creating account..." value="Создать кошелек">
-                </div>
+            <form method="post">
+               <br><br><br>
+                    <input type="button" onclick="generate()" class="col-xs-12 btn btn-primary btn-load btn-lg"
+                           data-loading-text="Creating account..." value="Создать пару ключей">
             </form>
             <br>
             <br>
@@ -96,6 +63,7 @@
 </html>
 
 <script src="./js/UI.js"></script>
+<script src="js/lib/rsa.min.js"></script>
 <script src="./js/utils/bower_components/crypto-js/crypto-js.js"></script>
 <script src="./js/lib/waves.module.js"></script>
 <script src="./js/utils/qrious.min.js"></script>

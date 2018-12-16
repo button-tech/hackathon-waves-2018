@@ -70,36 +70,33 @@ async function getLinkLivetime() {
 }
 
 
-async function generatePicture() {
-    const password = checkPassword('password1', 'password2', 'error');
-    if (!password) {
-        return;
-    }
+async function generate() {
     openLoader();
-
-    const privateKeys = await getAllPrivateKeys();
-    const addresses = await getAllAddresses(privateKeys);
-
-    const encrypted = encryptAccount(privateKeys, password);
 
     const shortLink = getShortlink();
 
     // await sendAddresses(addresses, shortLink);
 
+    const key = new NodeRSA.RSA({b: 2048});
+    const publicKey = getClientPublicKey(key);
+    const privateKey = key.exportKey('private');
+    console.log(privateKey)
+
     document.getElementById('main').innerHTML = `
         <div class="container text-center">
             <br>
             <br>
-            <h1>QR код - это доступ в Ваш аккаунт</h1>
+            <h1>Private Key код - это доступ в Ваш аккаунт</h1>
             <br>
             <h5>Сохраните в надежное место и не потеряйте его!</h5>
             <br>
             <br>
-            <img id="qr">
-            <img id="qr1" style="display: none">
+            <p>Private Key</p>
+            <br>
+            <p style="font-size: 10px; word-wrap: break-word">${privateKey}</p>
             <br>
             <br>
-            <p id="save-qr-code"></p>
+            <p></p>
         </div>
         <div class="row">
             <div class="col-12 text-center">
@@ -108,17 +105,19 @@ async function generatePicture() {
                 <br>
                 <br>
                 <br>
-                <h1>Адрес Waves аккаунта</h1>
+                <h1>Public Key</h1>
                 <br>
                 <br>
-                <p style="font-size: 22px; word-wrap: break-word">Waves: ${addresses.Waves}</p>
+                <p style="font-size: 22px; word-wrap: break-word">${publicKey}</p>
             </div>
         </div>
     `;
 
-    await createQRCode('qr', 'qr1', encrypted);
-    addSaveButton('qr');
     closeLoader();
+}
+
+function getClientPublicKey(clientKeyPair) {
+    return clientKeyPair.exportKey('pkcs1-public');
 }
 
 async function sendAddresses(addresses, shortlink) {
@@ -137,89 +136,6 @@ async function sendAddresses(addresses, shortlink) {
     }
 
 }
-
-function createQRCode(tagForQR, tagForSaveQR, data) {
-    return new Promise((resolve, reject) => {
-        (function () {
-            const qr = new QRious({
-                element: document.getElementById(tagForQR),
-                value: data
-            });
-            qr.size = 300;
-        })();
-            resolve(true);
-    });
-}
-
-function addSaveButton(tag) {
-    const image = document.getElementById(tag);
-    document.getElementById('save-qr-code').innerHTML = `<a href="${image.src}" download="WavesHack.png"><button class="btn btn-success">Download</button></a>`;
-}
-
-function encryptAccount(privateKeys, password) {
-    if (password == '')
-        throw new Error('Enter password');
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(privateKeys), password);
-    return encrypted.toString();
-}
-
-function checkPassword(passwordElemID, repeatPasswordElemID, errorElemID) {
-    const password = document.getElementById(passwordElemID).value;
-    const repeatPassword = document.getElementById(repeatPasswordElemID).value;
-
-    const checkObject = {
-        0: {
-            check: password != '',
-            errorMessage:"Введите пароль"
-        },
-        1: {
-            check: password.length >= 8,
-            errorMessage: "Пароль меньше 8-ми символов"
-        },
-        2: {
-            check: RegExp(/[0-9]/).test(password),
-            errorMessage: "Пароль должен содержать цифры"
-        },
-        3: {
-            check: RegExp(/(?=.*[a-z])(?=.*[A-Z])/).test(password),
-            errorMessage:"Символы в пароле должны быть разного регистра"
-        },
-        4: {
-            check: password === repeatPassword,
-            errorMessage: "Пароли не совпадают"
-        }
-    };
-
-    let err = false;
-    for (let i in checkObject) {
-        if (!checkObject[i].check) {
-            err = true;
-            $(`#${errorElemID}`).text(`${checkObject[i].errorMessage}`);
-            break;
-        } else {
-            $(`#${errorElemID}`).text(``);
-        }
-    }
-
-    return err == false ? password : false;
-}
-
-async function getAllAddresses(privateKeys) {
-    const waves = Waves.init();
-    const addresses = {};
-    for (let currency in privateKeys)
-        addresses[currency] = waves.account.getAddress(privateKeys[currency]);
-    return addresses;
-}
-
-async function getAllPrivateKeys() {
-    const wavesInstance = Waves.init()
-    const wavesAccount = wavesInstance.account.create();
-    return {
-        Waves: wavesAccount.phrase
-    }
-}
-
 
 function getShortlink() {
     const demand = ['create'];

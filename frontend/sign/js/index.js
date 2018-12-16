@@ -102,7 +102,7 @@ function sendSignature(signature, timestamp) {
 }
 
 function signData(clientKey, data) {
-    return clientKey.sign(data);
+    return clientKey.sign(data, 'hex');
 }
 
 function decrypt(privateKeyPartner, encryptedDocument) {
