@@ -1,9 +1,10 @@
 const backendURL = "http://localhost:3000";
+const ipfsServiceURL = 'http://localhost:8080/get/;
 const telegramServiceURL = "";
 const masterAddress = "3N1yku2yYUB1QkQKsRR3fX5Dv9LxJFWk2gm";
 
-async function GetDataFromIPFS(data){
-        const rawResponse = await fetch('http://localhost:8080/get/'+data);
+async function GetDataFromIPFS(commitHash){
+        const rawResponse = await fetch(`${ipfsServiceURL}/${commitHash}`);
         return rawResponse.json();
 }
 
