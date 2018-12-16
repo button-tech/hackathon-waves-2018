@@ -154,3 +154,9 @@ body {
 .loader {
     background-color:white !important;
 }
+
+#cbutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

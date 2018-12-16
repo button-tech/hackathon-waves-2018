@@ -16,16 +16,13 @@ async function GetRootHashFromBlockchain(address){
 async function Verify(){
     const id = "5c1549c84be32e9d5decb985";
     const { index, hash, signatures } = (await query("GET", `${backendURL}/download/${id}`)).result.document;
-    console.log(hash)
     const concatSignatures = signatures.reduce((acc, val) => acc + val);
-    const _hash = CryptoJS.SHA256(hash + concatSignatures).toString();
-    if (hash != _hash) {
-        alert('Хэши не совпадают');
-        return;
-    }
+    const leaf = CryptoJS.SHA256(hash + concatSignatures).toString();
     let response = await fetch(`${backendURL}/proof/${index}/${hash}`)
     const proof = (await response.json()).result.proof;
-    console.log(verify(proof, hash, await GetRootHashFromBlockchain("masterAddress"), CryptoJS.SHA256))
+    const { value } = await GetRootHashFromBlockchain(masterAddress);
+    console.log(proof)
+    console.log(verify(proof, leaf, value.substring(2), CryptoJS.SHA256))
 }
 
 async function getUserData() {
