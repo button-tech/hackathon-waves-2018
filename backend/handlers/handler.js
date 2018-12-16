@@ -144,7 +144,7 @@ async function getProof(req, res) {
         return;
     }
     const concatSignatures = doc.signatures.reduce((acc, val) => acc + val);
-    const leaf = MerkleTree.SHA256(hash + concatSignatures);
+    const leaf = MerkleTree.SHA256(hash + concatSignatures + doc.timestampOwner + doc.timestampPartner);
     const { tree } = await Document.getTree();
     const proof = MerkleTree.getProof(tree, leaf);
     if (txNumber == doc.index) {

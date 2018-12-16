@@ -48,9 +48,9 @@ async function updateDocumentSignatureAndTimestamp(id, signature, timestamp) {
 }
 
 async function pushTreeToDB(id, document) {
-    const { hash, signatures } = document;
+    const { hash, signatures, timestampOwner, timestampPartner } = document;
     const concatSignatures = signatures.reduce((acc, val) => acc + val);
-    const newLeave = MerkleTree.SHA256(hash + concatSignatures);
+    const newLeave = MerkleTree.SHA256(hash + concatSignatures + timestampOwner + timestampPartner);
     let old = await Tree.get();
     let tree;
     if (old === null) {
