@@ -120,7 +120,7 @@ function signData(clientKey, data) {
 }
 
 function getHash(data) {
-    return CryptoJS.SHA256(data);
+    return CryptoJS.SHA256(data).toString();
 }
 
 /**

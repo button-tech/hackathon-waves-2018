@@ -1,5 +1,6 @@
 const backendURL = "http://localhost:3000";
 const telegramServiceURL = "";
+const masterAddress = "3N1yku2yYUB1QkQKsRR3fX5Dv9LxJFWk2gm";
 
 async function GetDataFromIPFS(data){
         const rawResponse = await fetch('http://localhost:8080/get/'+data);
@@ -13,13 +14,18 @@ async function GetRootHashFromBlockchain(address){
 }
 
 async function Verify(){
-
+    const id = "5c1549c84be32e9d5decb985";
+    const { index, hash, signatures } = (await query("GET", `${backendURL}/download/${id}`)).result.document;
+    console.log(hash)
     const concatSignatures = signatures.reduce((acc, val) => acc + val);
-    CryptoJS.SHA256(hash + concatSignatures)
-
-    // for proof
-    let proof = await fetch("http://localhost:3000/proof/:txNumber/:hash")
-    
+    const _hash = CryptoJS.SHA256(hash + concatSignatures).toString();
+    if (hash != _hash) {
+        alert('Хэши не совпадают');
+        return;
+    }
+    let response = await fetch(`${backendURL}/proof/${index}/${hash}`)
+    const proof = (await response.json()).result.proof;
+    console.log(verify(proof, hash, await GetRootHashFromBlockchain("masterAddress"), CryptoJS.SHA256))
 }
 
 async function getUserData() {

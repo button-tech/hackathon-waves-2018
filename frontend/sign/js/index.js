@@ -48,7 +48,7 @@ async function sign() {
     } = await getDecryptedDocument();
     const signaturePartner = signData(keyPair, encryptedDocumentPartner);
     const timestampPartner = Date.now();
-    const hashParent = CryptoJS.SHA256(encryptedDocumentPartner);
+    const hashParent = CryptoJS.SHA256(encryptedDocumentPartner).toString();
     if (hashParent != hash) {
         alert("Хэши владельца документа и партнера не совпадают");
         return;
@@ -129,8 +129,8 @@ function download(filename, data) {
     }
 }
 
-function getDocument(id) {
-    return query("GET", `${backendURL}/download/${id}`);
+async function getDocument(id) {
+    return (await query("GET", `${backendURL}/download/${id}`)).result.document;
 }
 
 /**
