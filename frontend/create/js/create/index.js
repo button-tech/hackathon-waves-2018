@@ -109,9 +109,7 @@ async function generate() {
         </div>
     `;
     download("RSAPrivateKey.txt", privateKey);
-
-    // TODO: prod url
-
+    
     const resp = await fetch(`${telegramServiceURL}/`, {
         method: 'POST',
         headers: {
