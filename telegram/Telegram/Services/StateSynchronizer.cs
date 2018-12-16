@@ -13,40 +13,118 @@ namespace WavesBot.Services
     using UI.ViewModels;
     using ViewLib.BaseNavigation;
     using ViewLib.Data;
+    using ViewLib.Repositories;
 
     public class StateSynchronizer
     {
         private readonly PageNavigator navigator;
         private readonly PageLocator pageLocator;
         private readonly AccountService accountService;
+        private readonly IPropertiesRepository propertiesRepository;
+        private readonly BotService botService;
 
         public StateSynchronizer(PageNavigator navigator, PageLocator pageLocator,
-            AccountService accountService)
+            AccountService accountService, IPropertiesRepository propertiesRepository,
+            BotService botService)
         {
             this.navigator = navigator;
             this.pageLocator = pageLocator;
             this.accountService = accountService;
+            this.propertiesRepository = propertiesRepository;
+            this.botService = botService;
         }
 
         public async Task ResolveState(Update update)
         {
             await HandleCallback(update);
-            
+
             if (update.Type != UpdateType.Message)
                 return;
 
             if (update.Message.Type != MessageType.Text)
                 return;
-            
+
+            var special = await SpecialCommandsParser(update);
+            if (special)
+                return;
+
             await accountService.ReadUser(GetUserId(update));
-            
+
             var isRegister = await RestoreRegistration(update);
             if (!isRegister)
                 return;
-            
+
             await RestoreState(update);
         }
+
+        private async Task<bool> SpecialCommandsParser(Update update)
+        {
+            var text = GetMessageText(update);
+
+            if (text.Contains("/start"))
+            {
+                var identifier = GetUserId(update);
+
+                await propertiesRepository.DeleteAsync(identifier);
+                await navigator.RemoveAllNavigationStack(identifier);
+                await CreateUserIfNotExist(update);
+
+                await RestoreRegistration(update);
+
+                await RestoreState(update);
+
+                return true;
+            }
+
+            if (text.Contains("/help"))
+            {
+                await SendHelp(update);
+                return true;
+            }
+
+            if (text.Contains("/clean"))
+                await CleanUp(update);
+
+            return false;
+        }
         
+        /// <summary>
+        /// Выбрасывает страницу с помощью
+        /// </summary>
+        /// <param name="update"></param>
+        /// <returns></returns>
+        private async Task SendHelp(Update update)
+        {
+            var identifier = GetUserId(update);
+            var helpText = "Здесь будет помощь";
+            await botService.Client.SendTextMessageAsync(identifier, helpText);
+        }
+        
+        /// <summary>
+        /// Очищает данные, хранящиеся в кеше
+        /// </summary>
+        /// <param name="update"></param>
+        /// <returns></returns>
+        private async Task CleanUp(Update update)
+        {
+            var identifier = GetUserId(update);
+
+            await botService.Client.SendTextMessageAsync(identifier,"Сессия очищена");
+
+            await propertiesRepository.DeleteAsync(identifier);
+            await navigator.RemoveAllNavigationStack(identifier);
+        }
+
+        private async Task CreateUserIfNotExist(Update update)
+        {
+            var identifier = GetUserId(update);
+            var nickName = GetNickName(update);
+
+            var isUserExist = await accountService.IsExistAsync(identifier);
+            if (!isUserExist)
+                await accountService.CreateTelegramUser(identifier, nickName);
+        }
+
         /// <summary>
         /// Восстанавливает станицу, на которой юзер был
         /// </summary>
@@ -60,7 +138,7 @@ namespace WavesBot.Services
             if (!isMainMenu)
                 await navigator.RestoreLastPage(identifier, update);
         }
-        
+
         /// <summary>
         /// Доступ к MainMenu (то, что снизу) из любого места
         /// </summary>
@@ -70,7 +148,7 @@ namespace WavesBot.Services
         {
             var result = false;
             var identifier = GetUserId(update);
-            
+
             if (update.Message.Text == "Мои документы")
             {
                 result = true;
@@ -80,7 +158,7 @@ namespace WavesBot.Services
 
             return result;
         }
-        
+
         private async Task<bool> RestoreRegistration(Update update)
         {
             var identifier = GetUserId(update);
@@ -105,7 +183,7 @@ namespace WavesBot.Services
             {
             }
         }
-        
+
         private static readonly Dictionary<string, Type> GlobalCallBacks = new Dictionary<string, Type>();
 
         public async Task Init()
@@ -126,14 +204,14 @@ namespace WavesBot.Services
                 }
             }
         }
-        
+
         private async Task ResolveCallBackState(long identifier, object context, string callBackData)
         {
             var type = GlobalCallBacks[callBackData];
 
             await navigator.PushPageAsync(type, identifier, context, NavigationType.PageToPage);
         }
-        
+
         private long GetUserId(Update update)
         {
             return update?.CallbackQuery?.Message?.Chat.Id ??
@@ -174,7 +252,7 @@ namespace WavesBot.Services
 
             await RestoreState(update);
         }
-        
+
         private static Update GenerateMessageUpdate(long identifier)
         {
             var update = new Update
@@ -183,7 +261,7 @@ namespace WavesBot.Services
                 {
                     From = new User
                     {
-                        Id = (int)identifier
+                        Id = (int) identifier
                     },
                     Chat = new Chat
                     {
