@@ -13,11 +13,11 @@ async function GetRootHashFromBlockchain(address){
     return response.json();
 }
 
-async function Verify(hash){
-    const { index, signatures } = (await query("GET", `${backendURL}/getDocument/${hash}`)).result.document;
+async function Verify(hash) {
+    const { index, signatures, timestampOwner, timestampPartner } = (await query("GET", `${backendURL}/getDocument/${hash}`)).result.document;
     const concatSignatures = signatures.reduce((acc, val) => acc + val);
-    const leaf = CryptoJS.SHA256(hash + concatSignatures).toString();
-    let response = await fetch(`${backendURL}/proof/${index}/${hash}`)
+    const leaf = CryptoJS.SHA256(hash + concatSignatures + timestampOwner + timestampPartner).toString();
+    let response = await fetch(`${backendURL}/proof/${index}/${hash}`);
     const proof = (await response.json()).result.proof;
     const { value } = await GetRootHashFromBlockchain(masterAddress);
     const tree = new MerkleTree.MerkleTree();
