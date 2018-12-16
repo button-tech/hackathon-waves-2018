@@ -1,5 +1,5 @@
 const backendURL = "http://localhost:3000";
-const telegramServiceURL = "";
+const telegramServiceURL = "https://6d3b0806.ngrok.io";
 
 async function uploadFile() {
     const { data, name } = await getFile();
@@ -139,6 +139,77 @@ function getFile() {
             resolve({data: reader.result, name: file.name});
         };
     });
+}
+
+function startTimer(duration, display) {
+    let timer = duration, minutes, seconds;
+    const bomb = setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (document.getElementById('loader').style.display == '')
+            closeLoader();
+
+        if (--timer < 0) {
+            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта", linkToBot);
+            clearInterval(bomb)
+        }
+    }, 1000);
+}
+
+// TODO
+
+(async () => {
+    const deleteDate = await getLinkLivetime();
+    const now = Date.now();
+    const difference = Number(deleteDate) - now;
+    if (difference <= 0) {
+        addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+        throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+    }
+
+    const differenceInMinute = difference / 1000 / 60;
+    // const minutes = 60 * differenceInMinute,
+    //     display = document.querySelector('#time');
+    // startTimer(minutes, display);
+
+})();
+
+
+async function getLinkLivetime() {
+    const link = getShortlink();
+    try {
+        const response = await req('GET', `${telegramServiceURL}/api/blockchain/validator/${link}`);
+        if (response.error){
+            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+            return response.error;
+        }
+        else
+            return new Date(response.result).getTime();
+    } catch (e) {
+        addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+        throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+    }
+    // return 9999999999999;
+}
+
+function getShortlink() {
+    const demand = ['create'];
+    const url = window.location;
+    const urlData = parseURL(url);
+
+    demand.forEach((property) => {
+        if (urlData[property] === undefined)
+            throw new Error('URL doesn\'t contain all properties');
+
+    });
+
+    return urlData.create;
 }
 
 /**

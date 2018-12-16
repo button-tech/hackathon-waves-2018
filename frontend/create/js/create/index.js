@@ -29,7 +29,7 @@ function startTimer(duration, display) {
             closeLoader();
 
         if (--timer < 0) {
-            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта", linkToBot);
+            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
             clearInterval(bomb)
         }
     }, 1000);
