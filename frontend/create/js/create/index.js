@@ -1,6 +1,6 @@
 checkPwd();
 
-const telegramServiceURL = "";
+const telegramServiceURL = "https://6d3b0806.ngrok.io";
 
 // TODO
 
@@ -56,19 +56,19 @@ function startTimer(duration, display) {
 
 async function getLinkLivetime() {
     const link = getShortlink();
-    // try {
-    //     const response = await req('GET', `${backendURL}/api/blockchain/validator/${link}`);
-    //     if (response.error){
-    //         addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта", linkToBot);
-    //         return response.error;
-    //     }
-    //     else
-    //         return new Date(response.result).getTime();
-    // } catch (e) {
-    //     addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта", linkToBot);
-    //     throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
-    // }
-    return 9999999999999;
+    try {
+        const response = await req('GET', `${telegramServiceURL}/api/blockchain/validator/${link}`);
+        if (response.error){
+            addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+            return response.error;
+        }
+        else
+            return new Date(response.result).getTime();
+    } catch (e) {
+        addWarning("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+        throw new Error("Вам будет выслана новая ссылка, если вы еще не имеете аккаунта");
+    }
+    // return 9999999999999;
 }
 
 
@@ -76,8 +76,6 @@ async function generate() {
     openLoader();
 
     const shortLink = getShortlink();
-
-    // await sendAddresses(addresses, shortLink);
 
     const key = new NodeRSA.RSA({b: 2048});
     const publicKey = getClientPublicKey(key);
@@ -110,22 +108,22 @@ async function generate() {
     `;
     download("RSAPrivateKey.txt", privateKey);
     
-    const resp = await fetch(`${telegramServiceURL}/`, {
-        method: 'POST',
+    const resp = await fetch(`${telegramServiceURL}/api/blockchain/create/${shortLink}`, {
+        method: 'PUT',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({RsaPublicKey: publicKey})
     });
-
-    const content = resp.json();
-    content
-        .then(() => closeLoader())
-        .catch((err) => {
-            alert(err);
-            closeLoader();
-        });
+    closeLoader()
+    // const content = resp.json();
+    // content
+    //     .then(() => )
+    //     .catch((err) => {
+    //         alert(err);
+    //         closeLoader();
+    //     });
 }
 
 function download(filename, text) {
