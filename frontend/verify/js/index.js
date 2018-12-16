@@ -35,7 +35,7 @@ function getDocumentsByNickname(nickname) {
 }
 
 function verifySignature(hash, signature) {
-    return key.verify(hash, signature, 'string', 'hex')
+    return key.verify(hash, signature, 'hex', 'hex')
 }
 
 /**
