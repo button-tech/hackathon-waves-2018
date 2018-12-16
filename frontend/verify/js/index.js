@@ -21,8 +21,10 @@ async function Verify(){
     let response = await fetch(`${backendURL}/proof/${index}/${hash}`)
     const proof = (await response.json()).result.proof;
     const { value } = await GetRootHashFromBlockchain(masterAddress);
-    console.log(proof)
-    console.log(verify(proof, leaf, value.substring(2), CryptoJS.SHA256))
+    console.log(leaf)
+    const tree = new MerkleTree.MerkleTree();
+    tree.hashAlgo = CryptoJS.SHA256;
+    console.log(tree.verify(proof, "02d6314ca701459a2bc04c28163e8b0e03d2ce2ee06460803348798c8ecad1e0", "5d0cfb787eb2f575b94d79fc6cde138202826cf92b3960f47a4f40893b6d87cb"))
 }
 
 async function getUserData() {
