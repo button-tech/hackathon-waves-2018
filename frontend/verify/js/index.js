@@ -20,9 +20,35 @@ function getInfoFromInputs(){
     let documentHash = document.getElementByID("dochash").value;
     let ownerSignature = document.getElementByID("ownsign").value;
     let partnerSignature = document.getElementByID("partsign").value;
-    
-    let leave = CryptoJS.SHA256(documentHash+ownerSignature+partnerSignature)
+   
+    const isVerify = await Verify(documentHash);
+    if (isVerify) {
+        document.getElementById("is-verify-proof").innerText = `
+        <h1 style="color: green !important;">Yes</h1>`;
+    } else {
+        document.getElementById("is-verify-proof").innerText = `
+        <h1 style="color: red !important;">No</h1>`
+    }
 
+    if (
+        verifySignature(getPubKeyObj(ownerPubKey), documentHash, ownerSignature) && 
+        verifySignature(getPubKeyObj(partnerPubKey), documentHash, partnerSignature)
+        ) {
+            document.getElementById("is-verify-signatures").innerText = `
+            <h1 style="color: green !important;">Yes</h1>`;
+        } else {
+            document.getElementById("is-verify-signatures").innerText = `
+                        <h1 style="color: red !important;">No</h1>`;
+        }
+}
+
+function getPubKeyObj(pubKey) {
+    const key = new NodeRSA();
+    return key.importKey(pubKey, 'public');
+}
+
+function verifySignature(key, hash, signature) {
+    return key.verify(hash, signature, 'hex', 'hex')
 }
 
 async function Verify(hash) {
@@ -34,7 +60,7 @@ async function Verify(hash) {
     const { value } = await GetRootHashFromBlockchain(masterAddress);
     const tree = new MerkleTree.MerkleTree();
     tree.hashAlgo = CryptoJS.SHA256;
-    console.log(tree.verify(proof, leaf, value.substring(2)))
+    return tree.verify(proof, leaf, value.substring(2));
 }
 
 async function getUserData() {
@@ -43,10 +69,6 @@ async function getUserData() {
 
 function getDocumentsByNickname(nickname) {
     return query("GET", `${backendURL}/documents/owner/${nickname}`);
-}
-
-function verifySignature(hash, signature) {
-    return key.verify(hash, signature, 'hex', 'hex')
 }
 
 /**

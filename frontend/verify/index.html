@@ -40,20 +40,18 @@
                         </form>
                     </div>
                     <div class="text-center col-12">
-                        <a class="btn btn-lg btn-info cont_button" id="click1">Check</a>
+                        <a class="btn btn-lg btn-info cont_button" onclick="getInfoFromInputs()" id="click1">Check</a>
                     </div>
                 </li>
                 <li id="show1" style="display: none">
                     <h2 class="Asker">Info</h2>
                     <div class="col-md-12 text-center">
                        <h2>Is it verified by merkle proof?</h2>
-                       <h1 style="color: green !important;">Yes</h1>
-                       <h1 style="color: red !important;">No</h1>
+                        <span id="is-verify-proof"></span>
                     </div>
                     <div class="col-md-12 text-center">
                         <h2>Does it have valid signatures</h2>
-                        <h1 style="color: green !important;">Yes</h1>
-                        <h1 style="color: red !important;">No</h1>
+                        <span id="is-verify-signatures"></span>
                     </div>
                 </li>
             </ul>
