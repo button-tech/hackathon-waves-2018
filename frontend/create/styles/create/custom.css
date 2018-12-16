@@ -121,7 +121,7 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    background-color: blue;
+    background-color: white;
     margin: 35px 5px;
     opacity: 0;
 }
@@ -152,11 +152,19 @@ body {
     font-size: 20px !important;
 }
 .loader {
-    background-color:white !important;
+    background-color:black !important;
 }
 
 #cbutton{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.cont_button  {
+    background-color: black !important; color: white !important; border: none !important;
+}
+
+.btn {
+    border-radius: 0px;
 }
