@@ -1,3 +1,6 @@
+const backendURL = "http://localhost:3000";
+const telegramServiceURL = "";
+
 async function uploadFile() {
     const { data, name } = await getFile();
     const privateKey = document.getElementById('privateKey').value;
@@ -113,7 +116,7 @@ function fromPvtKeyToKeyPair(privateKey) {
  * @returns {Object} Sign data
  */
 function signData(clientKey, data) {
-    return clientKey.sign(data);
+    return clientKey.sign(data, 'hex');
 }
 
 function getHash(data) {
