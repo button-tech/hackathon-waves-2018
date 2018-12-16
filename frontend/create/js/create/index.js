@@ -81,22 +81,15 @@ async function generate() {
     const publicKey = getClientPublicKey(key);
     const privateKey = key.exportKey('private');
     console.log(privateKey)
-
     document.getElementById('main').innerHTML = `
         <div class="container text-center">
             <br>
             <br>
             <h1>Private Key код - это доступ в Ваш аккаунт</h1>
             <br>
+            <h4>Он сохранится в файле RSAPrivateKey.txt</h4>
             <h5>Сохраните в надежное место и не потеряйте его!</h5>
-            <br>
-            <br>
-            <p>Private Key</p>
-            <br>
-            <p style="font-size: 10px; word-wrap: break-word">${privateKey}</p>
-            <br>
-            <br>
-            <p></p>
+       
         </div>
         <div class="row">
             <div class="col-12 text-center">
@@ -108,12 +101,27 @@ async function generate() {
                 <h1>Public Key</h1>
                 <br>
                 <br>
+                <p id="pvt"></p>
                 <p style="font-size: 22px; word-wrap: break-word">${publicKey}</p>
             </div>
         </div>
     `;
+    download("RSAPrivateKey.txt",privateKey);
 
     closeLoader();
+}
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
 }
 
 function getClientPublicKey(clientKeyPair) {
