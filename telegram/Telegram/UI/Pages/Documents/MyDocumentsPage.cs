@@ -18,7 +18,7 @@ namespace WavesBot.UI.Pages.Documents
         {
             var inlineMenu = new InlineMenu
             {
-                Text = "Список ваших документов:",
+                Text = "Document List:",
                 Keyboard =
                     new InlineKeyboardMarkup(new[]
                     {

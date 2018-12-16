@@ -19,7 +19,7 @@ namespace WavesBot.UI.Pages.Documents
             var url = await viewModel.GetUrl();
             var inlineMenu = new InlineMenu
             {
-                Text = "Создать документ:",
+                Text = "Create document:",
                 Keyboard =
                     new InlineKeyboardMarkup(new[]
                     {
@@ -27,7 +27,7 @@ namespace WavesBot.UI.Pages.Documents
                         {
                             new InlineKeyboardButton
                             {
-                                Text = "Создать",
+                                Text = "Create",
                                 CallbackData = CallBack.RootPage.ToString(),
                                 Url = url
                             }

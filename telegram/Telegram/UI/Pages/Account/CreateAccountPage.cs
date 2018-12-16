@@ -23,7 +23,7 @@ namespace WavesBot.UI.Pages.Account
                 var createUrl = await viewModel.GetCreateUrl();
                 var inlineMenu = new InlineMenu
                 {
-                    Text = "Регистрация",
+                    Text = "Register",
                     Keyboard =
                         new InlineKeyboardMarkup(new[]
                         {
@@ -31,7 +31,7 @@ namespace WavesBot.UI.Pages.Account
                             {
                                 new InlineKeyboardButton
                                 {
-                                    Text = "Создать аккаунт",
+                                    Text = "Create account",
                                     CallbackData = CallBack.RootPage.ToString(),
                                     Url = createUrl
                                 }
