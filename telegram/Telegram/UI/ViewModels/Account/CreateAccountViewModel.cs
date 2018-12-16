@@ -42,7 +42,7 @@ namespace WavesBot.UI.ViewModels.Account
 
         public async Task<string> GetCreateUrl()
         {
-            var guid = await guidService.GenerateString(Identifier, UserId, NickName);
+            var guid = await guidService.GenerateString(Identifier, NickName);
 
             return $"{config.BlockChainAddress}/create/?create={guid}";
         }

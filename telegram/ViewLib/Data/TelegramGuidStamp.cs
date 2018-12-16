@@ -4,9 +4,7 @@ namespace ViewLib.Data
 
     public class TelegramGuidStamp
     {
-        public long ChatId { get; set; }
-
-        public int UserID { get; set; }
+        public long Identifier { get; set; }
 
         public string NickName { get; set; }
 

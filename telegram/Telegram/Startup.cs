@@ -127,7 +127,7 @@ services.AddEntityFrameworkNpgsql()
 
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            
+
             InitDb(dbContext);
 
             app.UseMvc();

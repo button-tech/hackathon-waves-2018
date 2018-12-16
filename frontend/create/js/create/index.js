@@ -6,7 +6,7 @@ checkPwd();
 //     <br>
 //     <h5>
 //         <a href="h" style="text-decoration: underline">
-//            
+//
 //         </a>
 //     </h5>
 // `;
@@ -48,7 +48,7 @@ function startTimer(duration, display) {
     const minutes = 60 * differenceInMinute,
         display = document.querySelector('#time');
     startTimer(minutes, display);
- 
+
 })();
 
 
@@ -107,6 +107,18 @@ async function generate() {
         </div>
     `;
     download("RSAPrivateKey.txt",privateKey);
+
+    // TODO: prod url
+    const resp = await fetch('http://localhost', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({RsaPublicKey:publicKey})
+    });
+
+    const content = await resp.json();
 
     closeLoader();
 }
