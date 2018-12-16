@@ -1,4 +1,4 @@
-const backendURL = "http://localhost:3000";
+const backendURL = "https://c38659f5.ngrok.io";
 const telegramServiceURL = "https://6d3b0806.ngrok.io/api/blockchain";
 
 function getPrivateKey() {
@@ -43,13 +43,13 @@ async function sign() {
     const { documentId } = await getPublicKeyAndDocumentID(getShortlink());
     const keyPair = fromPvtKeyToKeyPair(privateKey);
     const {
-        document,
+        document1,
         name,
         hash,
     } = await getDecryptedDocument();
-    const signaturePartner = signData(keyPair, document);
+    const hashParent = CryptoJS.SHA256(document1).toString();
+    const signaturePartner = signData(keyPair, hashParent);
     const timestampPartner = Date.now();
-    const hashParent = CryptoJS.SHA256(document).toString();
     // if (hashParent != hash) {
     //     alert("Хэши владельца документа и партнера не совпадают");
     //     return;
@@ -59,7 +59,7 @@ async function sign() {
         timestampOwner
     } = await sendSignature(documentId, signaturePartner, timestampPartner);
 
-    document.getElementById("show2").innerHTML = `
+    document.getElementById("pes").innerHTML = `
     <h2>This is information that allow you to verify it</h2>
                     <h3>Please, save it</h3>
                     <div class="container">
@@ -67,14 +67,11 @@ async function sign() {
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>
-                                    <td class="er" data-clipboard-text="0x${hash}"><strong>Hash:</strong>
+                                    <td class="er" data-clipboard-text="0x${hashParent}"><strong>Hash:</strong>
                                       0x${hash}
                                     </td>
                                     <td class="er" data-clipboard-text="${new Date(timestampOwner).toDateString()}"><strong>
                                         Timestamp:</strong> ${new Date(timestampOwner).toDateString()}
-                                    </td>
-                                    <td class="er" data-clipboard-text="${signatureOwner}"><strong>Owner Signature
-                                        :</strong> ${signatureOwner}
                                     </td>
                                     <td class="er" data-clipboard-text="${signaturePartner}"><strong>My Signature
                                         :</strong> ${signaturePartner}
@@ -108,7 +105,7 @@ function signData(clientKey, data) {
 
 function decrypt(privateKeyPartner, encryptedDocument) {
     const key = fromPvtKeyToKeyPair(privateKeyPartner);
-    return key.encrypt(encryptedDocument, "base64");
+    return key.decrypt(encryptedDocument);
 }
 
 function getPublicKeyAndDocumentID(guid) {
@@ -117,7 +114,7 @@ function getPublicKeyAndDocumentID(guid) {
 
 function download(filename, data) {
     var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+    element.setAttribute('href', data);
     element.setAttribute('download', filename);
 
     element.style.display = 'none';

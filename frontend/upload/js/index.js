@@ -117,7 +117,7 @@ function getData(guid) {
  */
 function encryptData(publicKey, data) {
     const key = new NodeRSA.RSA(publicKey, 'pkcs1-public');
-    return key.encrypt(data, 'base64');
+    return key.encrypt(data);
 }
 
 function fromPvtKeyToKeyPair(privateKey) {
