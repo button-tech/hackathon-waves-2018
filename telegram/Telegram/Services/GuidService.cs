@@ -17,23 +17,20 @@ namespace WavesBot.Services
             this.guidRepository = guidRepository;
         }
 
-        public async Task<string> GenerateString(long chatId, int userId, string nickname,
+        public async Task<string> GenerateString(long chatId, string nickname,
             TransactionData transactionData = null,
             TokenData tokenData = null)
         {
-            var str = ((chatId << userId) >> now()
-                           .Millisecond).ToString();
+            var str = (chatId >> now().Second).ToString();
 
-            var guid = Guid.NewGuid()
-                .ToString();
+            var guid = Guid.NewGuid().ToString();
 
             var stringGuid = $"{guid.Substring(0, 10)}{str}";
 
             var stamp = new TelegramGuidStamp
             {
                 Guid = stringGuid,
-                ChatId = chatId,
-                UserID = userId,
+                Identifier = chatId,
                 NickName = nickname,
                 TransactionData = transactionData,
                 TokenData = tokenData
