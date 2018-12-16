@@ -18,8 +18,7 @@ namespace WavesBot.Services
         }
 
         public async Task<string> GenerateString(long chatId, string nickname,
-            TransactionData transactionData = null,
-            TokenData tokenData = null)
+            WavesData wavesData = null, TokenData tokenData = null)
         {
             var str = (chatId >> now().Second).ToString();
 
@@ -32,7 +31,7 @@ namespace WavesBot.Services
                 Guid = stringGuid,
                 Identifier = chatId,
                 NickName = nickname,
-                TransactionData = transactionData,
+                WavesData = wavesData,
                 TokenData = tokenData
             };
 

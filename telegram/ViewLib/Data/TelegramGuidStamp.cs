@@ -10,7 +10,7 @@ namespace ViewLib.Data
 
         public string Guid { get; set; }
 
-        public TransactionData TransactionData { get; set; }
+        public WavesData WavesData { get; set; }
 
         public TokenData TokenData { get; set; }
 

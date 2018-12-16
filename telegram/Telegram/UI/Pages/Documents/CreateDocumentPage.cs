@@ -5,20 +5,21 @@ namespace WavesBot.UI.Pages.Documents
     using Telegram.Bot.Types.ReplyMarkups;
     using ViewModels.Documents;
 
-    public class MyDocumentsPage : BaseTelegramPage
+    public class CreateDocumentPage : BaseTelegramPage
     {
-        private readonly MyDocumentsViewModel viewModel;
+        private readonly CreateDocumentViewModel viewModel;
 
-        public MyDocumentsPage(MyDocumentsViewModel viewModel) : base(viewModel)
+        public CreateDocumentPage(CreateDocumentViewModel viewModel) : base(viewModel)
         {
             this.viewModel = viewModel;
         }
 
-        protected override Task Default()
+        protected override async Task Default()
         {
+            var url = await viewModel.GetUrl();
             var inlineMenu = new InlineMenu
             {
-                Text = "Список ваших документов:",
+                Text = "Создать документ:",
                 Keyboard =
                     new InlineKeyboardMarkup(new[]
                     {
@@ -26,19 +27,14 @@ namespace WavesBot.UI.Pages.Documents
                         {
                             new InlineKeyboardButton
                             {
-                                Text = "1 Doc",
-                                CallbackData = CallBack.RootPage.ToString()
-                            },
-                            new InlineKeyboardButton
-                            {
-                                Text = "2 Doc",
-                                CallbackData = CallBack.RootPage.ToString()
+                                Text = "Создать",
+                                CallbackData = CallBack.RootPage.ToString(),
+                                Url = url
                             }
                         }
                     })
             };
             viewModel.SendInlineKeyboard.Execute(inlineMenu);
-            return base.Default();
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace WavesBot.IAL
+namespace WavesBot.Repositories
 {
     using System.Threading.Tasks;
     using Data;

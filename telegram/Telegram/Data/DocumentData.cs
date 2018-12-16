@@ -8,4 +8,9 @@ namespace WavesBot.Data
         
         public string DocumentId { get; set; }
     }
+
+    public class DocumentDto
+    {
+        public string DocumentId { get; set; }
+    }
 }

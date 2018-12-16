@@ -6,6 +6,7 @@ namespace WavesBot
     using System.Reflection;
     using DryIoc;
     using IAL;
+    using Repositories;
     using Services;
     using UI.Pages;
     using UI.ViewModels;

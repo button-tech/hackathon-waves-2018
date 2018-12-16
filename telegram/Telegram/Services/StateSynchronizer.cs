@@ -7,6 +7,7 @@ namespace WavesBot.Services
     using System.Threading.Tasks;
     using Telegram.Bot.Types;
     using Telegram.Bot.Types.Enums;
+    using UI;
     using UI.Pages;
     using UI.Pages.Account;
     using UI.Pages.Documents;
@@ -87,7 +88,7 @@ namespace WavesBot.Services
 
             return false;
         }
-        
+
         /// <summary>
         /// Выбрасывает страницу с помощью
         /// </summary>
@@ -99,7 +100,7 @@ namespace WavesBot.Services
             var helpText = "Здесь будет помощь";
             await botService.Client.SendTextMessageAsync(identifier, helpText);
         }
-        
+
         /// <summary>
         /// Очищает данные, хранящиеся в кеше
         /// </summary>
@@ -109,7 +110,7 @@ namespace WavesBot.Services
         {
             var identifier = GetUserId(update);
 
-            await botService.Client.SendTextMessageAsync(identifier,"Сессия очищена");
+            await botService.Client.SendTextMessageAsync(identifier, "Сессия очищена");
 
             await propertiesRepository.DeleteAsync(identifier);
             await navigator.RemoveAllNavigationStack(identifier);
@@ -181,6 +182,19 @@ namespace WavesBot.Services
         {
             if (update.Type == UpdateType.CallbackQuery)
             {
+                var identifier = GetUserId(update);
+                var caster = (int) CallBackHelper.Caster(update.CallbackQuery.Data);
+                switch ((CallBack) caster)
+                {
+                    case CallBack.Back:
+                        await navigator.TryPopPageAsync(identifier, update, NavigationType.PageToPage);
+                        return;
+                    case CallBack.RootPage:
+                        await navigator.PopToRootAsync(identifier, update);
+                        return;
+                }
+
+                await ResolveCallBackState(identifier, update, update.CallbackQuery.Data);
             }
         }
 

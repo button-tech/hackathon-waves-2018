@@ -87,7 +87,7 @@ services.AddEntityFrameworkNpgsql()
                 () => ConnectionMultiplexer.Connect($"{redisHost}:{redisPort},allowAdmin=true,password={redisPassword}",
                     textWriter));
 #elif DEBUG || DEV
-            var redisIp = System.Net.Dns.GetHostEntryAsync(redisHost).Result.AddressList.First();
+            var redisIp = System.Net.Dns.GetHostEntryAsync(redisHost).Result.AddressList.Last();
             container.UseInstance<Func<ConnectionMultiplexer>>(() =>
                 ConnectionMultiplexer.Connect($"{redisIp}:{redisPort}", textWriter));
 #endif
