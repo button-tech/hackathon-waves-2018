@@ -16,8 +16,11 @@ namespace WavesBot
         public static void Load(IRegistrator builder)
         {
             builder.Register<BotService>(Reuse.Singleton);
+            builder.Register<AccountService>(Reuse.Singleton);
+            builder.Register<GuidService>(Reuse.Singleton);
+            builder.Register<StateSynchronizer>(Reuse.Singleton);
+            
             builder.Register<IRootPage, TelegramRootPage>(Reuse.Singleton);
-
             builder.Register<ILoggerService, LoggerService>(Reuse.Singleton);
 
             builder.RegisterMany(GetAssemblyPageTypes());
@@ -27,18 +30,19 @@ namespace WavesBot
         private static IEnumerable<Type> GetAssemblyPageTypes()
         {
             return typeof(BaseTelegramPage).GetTypeInfo()
-                                           .Assembly.DefinedTypes
-                                           .Where(typeInfo => typeInfo.IsClass && !typeInfo.IsAbstract && typeInfo.Name.Contains(@"Page")
-                                                              && typeInfo.BaseType == typeof(BaseTelegramPage))
-                                           .Select(x => x.AsType());
+                .Assembly.DefinedTypes
+                .Where(typeInfo => typeInfo.IsClass && !typeInfo.IsAbstract && typeInfo.Name.Contains(@"Page")
+                                   && typeInfo.BaseType == typeof(BaseTelegramPage))
+                .Select(x => x.AsType());
         }
+
         private static IEnumerable<Type> GetAssemblyViewModelsTypes()
         {
             return typeof(BaseTelegramViewModel).GetTypeInfo()
-                                                .Assembly.DefinedTypes
-                                                .Where(typeInfo => typeInfo.IsClass && !typeInfo.IsAbstract && typeInfo.Name.Contains(@"ViewModel")
-                                                                   && typeInfo.BaseType == typeof(BaseTelegramViewModel))
-                                                .Select(x => x.AsType());
+                .Assembly.DefinedTypes
+                .Where(typeInfo => typeInfo.IsClass && !typeInfo.IsAbstract && typeInfo.Name.Contains(@"ViewModel")
+                                   && typeInfo.BaseType == typeof(BaseTelegramViewModel))
+                .Select(x => x.AsType());
         }
     }
 }

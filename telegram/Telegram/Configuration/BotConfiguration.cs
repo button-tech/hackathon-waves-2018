@@ -1,4 +1,4 @@
-namespace WavesBot.Services
+namespace WavesBot.Configuration
 {
     public class BotConfiguration
     {

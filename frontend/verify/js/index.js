@@ -12,14 +12,14 @@ async function GetRootHashFromBlockchain(address){
     return response.json();
 }
 
-async function Verify(){
-
-    const concatSignatures = signatures.reduce((acc, val) => acc + val);
-    CryptoJS.SHA256(hash + concatSignatures)
-
-    // for proof
-    let proof = await fetch("http://localhost:3000/proof/:txNumber/:hash")
-    
+// TODO
+async function Verify(hash, numberid, id, address){
+    let doc = await fetch("http://localhost:3000/download/" + id)
+    const concatSignatures = doc.signatures.reduce((acc, val) => acc + val)
+    let leave = CryptoJS.SHA256(doc.hash + concatSignatures)
+    let proof = await fetch("http://localhost:3000/proof/" + numberid  + "/" + hash)
+    let root = await GetRootHashFromBlockchain(address)
+    verify(proof, leave, root ,CryptoJS.SHA256)
 }
 
 async function getUserData() {
