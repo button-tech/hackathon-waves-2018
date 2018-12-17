@@ -23,7 +23,7 @@ async function addDocument(
     digest,
     timestampOwner
 ) {
-    let ipfsDataHash = await req.SetToIpfs(encryptedDataOwner, encryptedDataPartner)
+    let { owner, partner } = await req.SetToIpfs(encryptedDataOwner, encryptedDataPartner)
     console.log(encryptedDataPartner)
     return await Document.create(
         name,
@@ -35,8 +35,8 @@ async function addDocument(
         requiredCountOfSignatures,
         [digest],
         timestampOwner,
-        ipfsDataHash.owner,
-        ipfsDataHash.partner,
+        owner,
+        partner,
     );
 }
 
