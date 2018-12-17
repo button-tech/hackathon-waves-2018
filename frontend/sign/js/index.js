@@ -1,5 +1,5 @@
-const backendURL = "https://c38659f5.ngrok.io";
-const telegramServiceURL = "https://6d3b0806.ngrok.io/api/blockchain";
+const backendURL = "https://cd6c4867.ngrok.io";
+const telegramServiceURL = "https://5ce5f1d2.ngrok.io/api/blockchain";
 
 function getPrivateKey() {
     return document.getElementById("privateKey").value;

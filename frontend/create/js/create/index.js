@@ -1,6 +1,6 @@
 checkPwd();
 
-const telegramServiceURL = "https://6d3b0806.ngrok.io";
+const telegramServiceURL = "https://5ce5f1d2.ngrok.io";
 
 // TODO
 
